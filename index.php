@@ -96,7 +96,7 @@
               $cedula = $_POST['cedula_buscar'];
               $cedula = (int) $cedula;
 
-              $consulta = "SELECT * FROM clientes WHERE id='$cedula'";
+              $consulta = "SELECT * FROM clientes WHERE cedula='$cedula'";
               $ejecutar = mysqli_query($conn, $consulta);
               $verFilas = mysqli_num_rows($ejecutar);
               $fila = mysqli_fetch_array($ejecutar);
