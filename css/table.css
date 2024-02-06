@@ -1,0 +1,139 @@
+
+body{
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1.6em;
+    color: #333;
+    overflow-y:hidden;
+}
+*{
+    box-sizing: border-box;
+}
+.hijo form{
+  margin-top: 50%;
+  text-align: center;
+min-width: 500px;
+}
+.listado{
+    font-size: 1.5em;
+  margin-left: 40%;
+  }
+  
+  .page-container{
+    max-width: 800px;
+    margin-right: 10%;
+    transition: 2s ease-out all;
+  max-height: 1000px;
+  }
+
+  .table-cebra{
+    border-top: solid 10px #ccc;
+    
+  }
+  .table-cebra thead th {
+      background:rgb(9, 142, 160);
+      color: white;
+
+  }
+  .table-cebra th,
+  .table-cebra td{
+    border-right: 1px solid #ccc;
+min-width:150px;
+padding: 0.5rem;
+text-align: left;
+  }
+  .table-cebra th:last-child,
+  .table-cebra td:last-child{
+    border-right: 0;
+  }
+  .table-cebra td{
+    border-bottom: 1px solid #ccc;
+
+  }
+
+  .table-cebra tbody tr{
+    background: white;
+  }
+  .table-cebra tbody tr:nth-child(2n){
+    background: #f2f2f2;
+  }
+
+  .table-container{
+    max-width: 100%;
+    max-height:70%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    
+  }
+  .table-cebra .sticky{
+    position:sticky;
+    left: 0;
+  }
+  .table-cebra tbody tr .sticky{
+background: white;
+  }
+  .table-cebra tbody tr:nth-child(2n) .sticky{
+    background: #f2f2f2;
+  }
+  .padre{
+    display: flex;
+    justify-content: space-between;
+
+  }
+  input{
+    
+    font-size: 1.3em;
+    margin-top: 20px;
+    border:1px solid#ccc;
+
+  }
+  input:hover{
+    cursor: pointer;
+    border:1px solid #333;
+    
+  }
+  .enviar{
+    margin-top: 20px;
+    padding:10px;
+    background-color: transparent;
+    transition: 1s ease all;
+  }
+  .enviar:hover{
+    background-color: teal;
+    color: #f2f2f2;
+    border: #f2f2f2;
+  }
+  label{
+    font-size: 1.3em;
+  }
+  .volver{
+    padding: 10px;
+    background-color: rgb(9, 142, 160);
+  color: white;
+  border-radius: 20px;
+  transition: all 0.5s ease;
+  }
+.volver:hover{
+  transform: scale(1.1);
+}
+  .volverTabla{
+    margin-top: 50%;
+  margin-left: 20%;
+  padding: 10px 10px;
+  background-color: rgb(9, 142, 160);
+  color: white;
+  border-radius: 20px;
+  transition: all 0.5s ease;
+  }
+  .volverTabla:hover{
+    transform: scale(1.1);
+   
+  }
+  .shadwon{
+    border-radius: 20px;
+    text-align: center;
+  }
+  
