@@ -63,7 +63,7 @@ if (!isset($_POST['Agregar'])) {
     $puntosdelcliente = $fila[5];
     
     $puntosfinales = $puntosdelcliente + $puntosAsumar;
-    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE id='$cedula'";
+    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE cedula='$cedula'";
 
     $resultado = mysqli_query($conn, $agregar);
     echo "<script>alert('Compra exitosa,  total a pagar: ' + $monto); 
@@ -105,7 +105,7 @@ if (!isset($_POST['Agregar'])) {
       $puntosdelcliente = $puntosdelcliente - 15;
     
       $puntosfinales = $puntosdelcliente + $puntosAsumar;
-      $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE id='$cedula'";
+      $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE cedula='$cedula'";
 
       $resultado = mysqli_query($conn, $agregar);  
       echo "<script>alert('Compra exitosa, total a pagar: ' + $monto); 
@@ -145,7 +145,7 @@ if (!isset($_POST['Agregar'])) {
     $puntosdelcliente = $puntosdelcliente - 25;
   
     $puntosfinales = $puntosdelcliente + $puntosAsumar;
-    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE id='$cedula'";
+    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE cedula='$cedula'";
 
     $resultado = mysqli_query($conn, $agregar);  
     echo "<script>alert('Compra exitosa, total a pagar: ' + $monto); 
@@ -184,7 +184,7 @@ if (!isset($_POST['Agregar'])) {
     $puntosdelcliente = $puntosdelcliente - 35;
   
     $puntosfinales = $puntosdelcliente + $puntosAsumar;
-    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE id='$cedula'";
+    $agregar = "UPDATE clientes SET total='$montofinal', cantidadCompras='$comprastales',puntos='$puntosfinales' WHERE cedula='$cedula'";
 
     $resultado = mysqli_query($conn, $agregar);  
     echo "<script>alert('Compra exitosa, total a pagar: ' + $monto); 

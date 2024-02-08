@@ -79,7 +79,7 @@ if(isset($_GET['filter']) && !empty($_GET['filter']) && $_GET['filter'] != ""){
     $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula LIKE '$filter_value%'");
 
 }else{
-    $sql = mysqli_query($conn, "SELECT * FROM clientes ORDER BY nombre ASC");
+    $sql = mysqli_query($conn, "SELECT * FROM clientes ORDER BY nombre ASC LIMIT  10");
 }
 if(mysqli_num_rows($sql) == 0){
     echo '<tr><td colspan="8">No hay datos.</td></tr>';
@@ -96,14 +96,17 @@ if(mysqli_num_rows($sql) == 0){
                     <td>'.$row['cantidadCompras'].'</td>
                     <td>'.$row['puntos'].'</td>
                     <td>'.$row['total'].'</td>
-                    <td>';echo '</td>
-                    <td>
-                    <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                    
-                    <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombre'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                    </td>
-        </tr>
-        ';
+                    <td>';  if(isset($_SESSION['rol']) &&  $_SESSION['rol'] == "ADMIN"){
+                        echo '</td>
+                        <td>
+                            <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                            
+                            <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombre'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            </td>
+                        </tr>';
+                    } echo '
+        </tr>';
+
         $no++;
     }
 }
