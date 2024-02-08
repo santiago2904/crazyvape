@@ -96,7 +96,7 @@ if(mysqli_num_rows($sql) == 0){
                     <td>'.$row['cantidadCompras'].'</td>
                     <td>'.$row['puntos'].'</td>
                     <td>'.$row['total'].'</td>
-                    <td>';  if(isset($_SESSION['rol']) &&  $_SESSION['rol'] == "ADMIN"){
+                    <td>';  if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
                         echo '</td>
                         <td>
                             <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
