@@ -10,8 +10,12 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav ">
-					<li class="active"><a href="index.php">Lista de empleados</a></li>
+					<li class="active"><a href="crudEmpleados.php">Lista de Empleados</a></li>
+					<li class="active"><a href="crud.php">Lista de Clientes</a></li>
 					<li><a href="add.php">Agregar datos</a></li>
+
 				</ul>
+				
 			</div><!--/.nav-collapse -->
+			
 	</div>

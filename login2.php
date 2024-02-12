@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +12,7 @@
     <title>Inicio de sesion</title>
 </head>
 <body>
-    <form action="IniciarSesion.php" method="POST">
+    <form action="login_conexion.php"  method="POST">
         <h1>INICIAR SESION</h1>
         <hr>
         <?php 
@@ -35,7 +37,7 @@
         <label>Clave</label>
         <input type="password" name="Clave" placeholder="Clave">
         <hr>
-        <button type="submit">Iniciar Sesion</button>        
+        <button type="submit">Iniciar Sesion</button>
     </form>
 </body>
 </html>
