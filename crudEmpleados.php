@@ -1,5 +1,20 @@
 <?php
-include("conexion.php");
+
+    session_start();
+
+    if(!isset($_SESSION['usuario'])){
+        echo'
+            <script>
+                alert("Por favor iniciar sesión.");
+                window.location = "login2.php";
+            </script>
+        ';
+        session_destroy();
+        die();
+    }
+    
+    include("conexion.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,10 +41,14 @@ include("conexion.php");
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <?php include('nav.php');?>
+        <ul class = "nav navbar-nav navbar-right">
+            <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
+        </ul>
     </nav>
     <div class="container">
         <div class="content">
             <h2>Lista de Empleados</h2>
+
             <hr />
 
             <?php
