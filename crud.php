@@ -29,7 +29,7 @@ include("conexion.php");
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Lista de clientes</h2>
+            <h2>Lista de Clientes</h2>
             <hr />
 
             <?php

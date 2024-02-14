@@ -13,8 +13,25 @@
 					<li class="active"><a href="crudEmpleados.php">Lista de Empleados</a></li>
 					<li class="active"><a href="crud.php">Lista de Clientes</a></li>
 					<li><a href="add.php">Agregar datos</a></li>
-
 				</ul>
+				<ul class="nav navbar-nav navbar-right">
+            		<li class="dropdown">
+                		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    		<?php
+                        		session_start();
+                        		if(isset($_SESSION['usuario'])) {
+                            		echo $_SESSION['usuario'];
+                        		} else {
+                            		echo 'Mi Perfil';
+                        		}
+                    		?>
+                    		<span class="caret"></span>
+                		</a>
+                		<ul class="dropdown-menu">
+                    		<li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
+                		</ul>
+            		</li>
+        		</ul>
 				
 			</div><!--/.nav-collapse -->
 			

@@ -41,10 +41,8 @@
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <?php include('nav.php');?>
-        <ul class = "nav navbar-nav navbar-right">
-            <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
-        </ul>
     </nav>
+    
     <div class="container">
         <div class="content">
             <h2>Lista de Empleados</h2>
