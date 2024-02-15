@@ -1,20 +1,18 @@
 <?php
+session_start();
 
-    session_start();
+if(!isset($_SESSION['usuario'])){
+    echo'
+        <script>
+            alert("Por favor iniciar sesión.");
+            window.location = "login2.php";
+        </script>
+    ';
+    session_destroy();
+    die();
+}
 
-    if(!isset($_SESSION['usuario'])){
-        echo'
-            <script>
-                alert("Por favor iniciar sesión.");
-                window.location = "login2.php";
-            </script>
-        ';
-        session_destroy();
-        die();
-    }
-    
-    include("conexion.php");
-
+include("conexion.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -42,22 +40,20 @@
     <nav class="navbar navbar-default navbar-fixed-top">
         <?php include('nav.php');?>
     </nav>
-    
     <div class="container">
         <div class="content">
-            <h2>Lista de Empleados</h2>
-
+            <h2>Lista de Clientes</h2>
             <hr />
 
             <?php
     if(isset($_GET['aksi']) == 'delete'){
     // escaping, additionally removing everything that could be (html/javascript-) code
     $id = mysqli_real_escape_string($con,(strip_tags($_GET["id"],ENT_QUOTES)));
-    $result = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula='$id'");
+    $result = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula='$id'");
     if(mysqli_num_rows($result) == 0){
         echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
     }else{
-            $delete = mysqli_query($conn, "DELETE FROM empleados WHERE cedula='$id'");
+            $delete = mysqli_query($conn, "DELETE FROM clientes WHERE cedula='$id'");
         if($delete){
             echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminado correctamente.</div>';
         }else{
@@ -84,7 +80,9 @@
                         <th>Celular</th>
                         <th>Correo</th>
                         <th>Rol</th>
-                       
+                        <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+                        <th>Acciones</th>
+                        <?php endif; ?>
                     </tr>
                     <?php
 if(isset($_GET['filter']) && !empty($_GET['filter']) && $_GET['filter'] != ""){
@@ -108,15 +106,15 @@ if(mysqli_num_rows($sql) == 0){
                     <td><a href="profile.php?id='.$row['id'].'"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> '.$row['nombres'].'</a></td>
                     <td>'.$row['celular'].'</td>
                     <td>'.$row['correo'].'</td>
-                    <td>';  if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
-                        echo '</td>
-                        <td>
+                    <td>'.$row['rol_id'].'</td>
+                    ';  
+                    if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
+                        echo '<td>
                             <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            
                             <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombres'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                            </td>
-                        </tr>';
-                    } echo '
+                            </td>';
+                    } 
+                    echo '
         </tr>';
 
         $no++;

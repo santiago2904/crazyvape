@@ -1,4 +1,19 @@
 <?php
+
+session_start();
+
+if(!isset($_SESSION['usuario'])){
+    echo'
+        <script>
+            alert("Por favor iniciar sesión.");
+            window.location = "login2.php";
+        </script>
+    ';
+    session_destroy();
+    die();
+}
+
+
 include("conexion.php");
 ?>
 <!DOCTYPE html>
