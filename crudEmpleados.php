@@ -42,18 +42,18 @@ include("conexion.php");
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Lista de Clientes</h2>
+            <h2>Lista de Empleados</h2>
             <hr />
 
             <?php
     if(isset($_GET['aksi']) == 'delete'){
     // escaping, additionally removing everything that could be (html/javascript-) code
     $id = mysqli_real_escape_string($con,(strip_tags($_GET["id"],ENT_QUOTES)));
-    $result = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula='$id'");
+    $result = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula='$id'");
     if(mysqli_num_rows($result) == 0){
         echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
     }else{
-            $delete = mysqli_query($conn, "DELETE FROM clientes WHERE cedula='$id'");
+            $delete = mysqli_query($conn, "DELETE FROM empleados WHERE cedula='$id'");
         if($delete){
             echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminado correctamente.</div>';
         }else{
@@ -110,7 +110,7 @@ if(mysqli_num_rows($sql) == 0){
                     ';  
                     if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
                         echo '<td>
-                            <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                            <a href="edit2.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
                             <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombres'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </td>';
                     } 

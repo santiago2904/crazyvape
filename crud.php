@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if(!isset($_SESSION['usuario'])){
@@ -12,7 +11,6 @@ if(!isset($_SESSION['usuario'])){
     session_destroy();
     die();
 }
-
 
 include("conexion.php");
 ?>
@@ -33,6 +31,15 @@ include("conexion.php");
     <style>
     .content {
         margin-top: 80px;
+    }
+
+    .acciones-cell {
+        width: 150px; /* Mismo ancho que la columna de encabezado */
+    }
+
+    .acciones-buttons {
+        display: flex;
+        justify-content: space-between;
     }
     </style>
 
@@ -77,14 +84,16 @@ include("conexion.php");
                 <table class="table table-striped table-hover">
                     <tr>
                         <th>No</th>
-                        <th>cedula</th>
+                        <th>Cédula</th>
                         <th>Nombre</th>
                         <th>Celular</th>
                         <th>Correo</th>
-                        <th>cantidad Compras</th>
+                        <th>Cantidad Compras</th>
                         <th>Puntos</th>
                         <th>Total</th>
-                        <th>Acciones</th>
+                        <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+                        <th class="acciones-cell">Acciones</th>
+                        <?php endif; ?>
                     </tr>
                     <?php
 if(isset($_GET['filter']) && !empty($_GET['filter']) && $_GET['filter'] != ""){
@@ -112,14 +121,13 @@ if(mysqli_num_rows($sql) == 0){
                     <td>'.$row['puntos'].'</td>
                     <td>'.$row['total'].'</td>
                     <td>';  if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
-                        echo '</td>
-                        <td>
+                        echo '<div class="acciones-buttons">
                             <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            
                             <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombre'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                            </td>
-                        </tr>';
-                    } echo '
+                            </div>';
+                    } 
+                    echo '
+        </td>
         </tr>';
 
         $no++;
