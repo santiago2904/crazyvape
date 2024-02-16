@@ -1,5 +1,19 @@
 <?php
 
+session_start();
+
+if(!isset($_SESSION['usuario'])){
+    echo'
+        <script>
+            alert("Por favor iniciar sesión.");
+            window.location = "login2.php";
+        </script>
+    ';
+    session_destroy();
+    die();
+}
+
+
 include("conexion.php");
 ?>
 <!DOCTYPE html>
@@ -33,7 +47,7 @@ include("conexion.php");
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Datos del empleado &raquo; Editar datos</h2>
+            <h2>Datos Cliente &raquo; Editar datos</h2>
             <hr />
 
             <?php
@@ -75,7 +89,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
+                        <input type="number" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
                             placeholder="Cédula" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -87,7 +101,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Nombre</label>
                     <div class="col-sm-4 input-group">
                         <input type="text" name="nombre" value="<?php echo $row['nombre']; ?>" class="form-control"
-                            placeholder="Nombre" required readonly>
+                            placeholder="Nombre" required readonly onkeypress="return soloLetras(event)">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('nombre')">Editar</button>
@@ -97,7 +111,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Número</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="numero" value="<?php echo $row['numero']; ?>" class="form-control"
+                        <input type="number" name="numero" value="<?php echo $row['numero']; ?>" class="form-control"
                             placeholder="Número" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -119,7 +133,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cantidad de Compras</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="cantidadCompras" value="<?php echo $row['cantidadCompras']; ?>"
+                        <input type="number" name="cantidadCompras" value="<?php echo $row['cantidadCompras']; ?>"
                             class="form-control" placeholder="Cantidad de Compras" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -141,7 +155,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Valor total comprado</label>
                     <div class="col-sm-3 input-group">
-                        <input type="text" name="total" value="<?php echo $row['total']; ?>" class="form-control"
+                        <input type="number" name="total" value="<?php echo $row['total']; ?>" class="form-control"
                             placeholder="Total valor gastado" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -190,6 +204,13 @@ include("conexion.php");
     function toggleReadOnly(fieldName) {
         var inputField = document.getElementsByName(fieldName)[0];
         inputField.readOnly = !inputField.readOnly;
+    }
+    </script>
+
+    <script>
+    function soloLetras(event) {
+        var key = event.keyCode;
+        return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
     }
     </script>
 

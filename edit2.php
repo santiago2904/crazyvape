@@ -45,7 +45,7 @@ include("conexion.php");
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Datos del Cliente &raquo; Editar datos</h2>
+            <h2>Datos Empleado &raquo; Editar datos</h2>
             <hr />
 
             <?php
@@ -86,7 +86,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
+                        <input type="number" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
                             placeholder="Cédula" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -98,7 +98,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Nombre</label>
                     <div class="col-sm-4 input-group">
                         <input type="text" name="nombres" value="<?php echo $row['nombres']; ?>" class="form-control"
-                            placeholder="Nombre" required readonly>
+                            placeholder="Nombre" required readonly onkeypress="return soloLetras(event)">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('nombres')">Editar</button>
@@ -108,7 +108,7 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Celular</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="celular" value="<?php echo $row['celular']; ?>" class="form-control"
+                        <input type="number" name="celular" value="<?php echo $row['celular']; ?>" class="form-control"
                             placeholder="Número" required readonly>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
@@ -130,12 +130,12 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">rol_id</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="rol_id" value="<?php echo $row['rol_id']; ?>"
-                            class="form-control" placeholder="rol_id" required readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('rol_id')">Editar</button>
-                        </div>
+                        <select name="rol_id" id="rol_id" class="form-control" required>
+                            <option value="">Seleccionar Rol</option>
+                            <option value="1">Rol 1</option>
+                            <option value="2">Rol 2</option>
+                            <!-- Agrega más opciones según sea necesario -->
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -182,6 +182,35 @@ include("conexion.php");
     function toggleReadOnly(fieldName) {
         var inputField = document.getElementsByName(fieldName)[0];
         inputField.readOnly = !inputField.readOnly;
+    }
+    </script>
+
+    <script>
+    function soloLetras(event) {
+        var key = event.keyCode;
+        return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
+    }
+    </script>
+
+    <script>
+    function validarCorreo() {
+        var correo = document.getElementsByName("correo")[0].value;
+        if (correo.indexOf("@") === -1) {
+            alert("Por favor, ingrese un correo válido");
+            return false;
+        }
+        return true;
+    }
+    </script>
+
+    <script>
+    function validarFormulario() {
+        var rolId = document.getElementById("rol_id").value;
+        if (rolId === "") {
+            alert("Por favor, seleccione un rol.");
+            return false; // Evita que el formulario se envíe
+        }
+        return true; // Permite que el formulario se envíe si se ha seleccionado un rol
     }
     </script>
 
