@@ -90,7 +90,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
-                            placeholder="Cédula" required readonly>
+                            placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('cedula')">Editar</button>
@@ -112,7 +112,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Número</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="numero" value="<?php echo $row['numero']; ?>" class="form-control"
-                            placeholder="Número" required readonly>
+                            placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('numero')">Editar</button>

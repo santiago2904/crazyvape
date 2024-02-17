@@ -82,12 +82,12 @@ include("conexion.php");
             }
             ?>
 
-            <form class="form-horizontal" action="" method="post">
+            <form class="form-horizontal" action="" method="post" onsubmit="return validarCorreo();">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
-                        <input type="number" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
-                            placeholder="Cédula" required readonly>
+                        <input type="text" name="cedula" id="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
+                            placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('cedula')">Editar</button>
@@ -109,13 +109,14 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Celular</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="celular" value="<?php echo $row['celular']; ?>" class="form-control"
-                            placeholder="Número" required readonly>
+                            placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('celular')">Editar</button>
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Correo</label>
                     <div class="col-sm-4 input-group">
@@ -191,24 +192,37 @@ include("conexion.php");
         return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
     }
     </script>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
     function validarCorreo() {
         var correo = document.getElementsByName("correo")[0].value;
         if (correo.indexOf("@") === -1) {
-            alert("Por favor, ingrese un correo válido");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, ingrese un correo válido.',
+            });
             return false;
         }
         return true;
     }
     </script>
+   
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
     function validarFormulario() {
         var rolId = document.getElementById("rol_id").value;
         if (rolId === "") {
-            alert("Por favor, seleccione un rol.");
-            return false; // Evita que el formulario se envíe
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, ingrese un Rol.',
+            });
+            return f            return false; // Evita que el formulario se envíe
         }
         return true; // Permite que el formulario se envíe si se ha seleccionado un rol
     }

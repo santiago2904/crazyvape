@@ -75,7 +75,7 @@ include("conexion.php");
                 <table class="table table-striped table-hover">
                     <tr>
                         <th>No</th>
-                        <th>cedula</th>
+                        <th>Cédula</th>
                         <th>Nombre</th>
                         <th>Celular</th>
                         <th>Correo</th>
@@ -123,6 +123,11 @@ if(mysqli_num_rows($sql) == 0){
 ?>
                 </table>
             </div>
+            <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+            <div class="text-right">
+                <a href="agregar_empleado.php" class="btn btn-primary">Agregar Empleado</a>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
     <center>
