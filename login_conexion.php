@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     // Verificar si la preparación de la consulta fue exitosa
     if($statement){
-        // Vincular los parámetros a la consulta
+
         mysqli_stmt_bind_param($statement, "ss", $contrasena, $usuario);
 
         // Ejecutar la consulta
