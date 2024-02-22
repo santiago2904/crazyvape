@@ -46,21 +46,24 @@ include("conexion.php");
             <hr />
 
             <?php
-    if(isset($_GET['aksi']) == 'delete'){
-    // escaping, additionally removing everything that could be (html/javascript-) code
-    $id = mysqli_real_escape_string($con,(strip_tags($_GET["id"],ENT_QUOTES)));
-    $result = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula='$id'");
-    if(mysqli_num_rows($result) == 0){
-        echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
-    }else{
-            $delete = mysqli_query($conn, "DELETE FROM empleados WHERE cedula='$id'");
-        if($delete){
-            echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminado correctamente.</div>';
-        }else{
-            echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error, no se pudo eliminar los datos.</div>';
+    if(isset($_GET['aksi']) && $_GET['aksi'] == 'delete'){
+        // escaping, additionally removing everything that could be (html/javascript-) code
+        $id = mysqli_real_escape_string($conn, $_GET["id"]); // Modificado $conn a $conn
+        
+        $result = mysqli_query($conn, "SELECT * FROM empleados WHERE id='$id'"); // Modificado $conn a $conn
+    
+        if(mysqli_num_rows($result) == 0){
+            echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
+        } else {
+            $delete = mysqli_query($conn, "DELETE FROM empleados WHERE id='$id'"); // Modificado $conn a $conn
+    
+            if($delete){
+                echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminados correctamente.</div>';
+            } else {
+                echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error, no se pudieron eliminar los datos.</div>';
+            }
         }
     }
-}
 ?>
 
             <form class="form-inline" method="get">
@@ -111,7 +114,7 @@ if(mysqli_num_rows($sql) == 0){
                     if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
                         echo '<td>
                             <a href="edit2.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombres'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            <a href="crudEmpleados.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombres'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </td>';
                     } 
                     echo '

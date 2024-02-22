@@ -6,7 +6,7 @@ include 'conexion.php';
 
 // Verificar si el usuario ya ha iniciado sesión
 if(isset($_SESSION['usuario'])){
-    header("location: crudEmpleados.php");
+    header("location: crud.php");
     exit; // Salir del script para evitar que se siga ejecutando
 }
 
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $_SESSION['correo'] = $row['correo'];
                 
                 // Redirigir a la página de empleados
-                header("location: crudEmpleados.php");
+                header("location: crud.php");
                 exit; // Salir del script para evitar que se siga ejecutando
             } else {
                 // Mostrar un mensaje de error en la página de inicio de sesión

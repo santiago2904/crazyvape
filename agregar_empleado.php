@@ -50,8 +50,9 @@ include("conexion.php");
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
                 $correo = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
-
-                $insert = mysqli_query($conn, "INSERT INTO empleados (cedula, nombres, celular, correo, rol_id) VALUES ('$cedula', '$nombres', '$celular', '$correo', '$rol_id')")
+                $usuario = mysqli_real_escape_string($conn, (strip_tags($_POST["usuario"], ENT_QUOTES)));
+                $contrasena = mysqli_real_escape_string($conn, (strip_tags($_POST["contrasena"], ENT_QUOTES)));
+                $insert = mysqli_query($conn, "INSERT INTO empleados (cedula, nombres, celular, correo, rol_id, usuario, contrasena) VALUES ('$cedula', '$nombres', '$celular', '$correo', '$rol_id', '$usuario', '$contrasena')")
                 or die(mysqli_error($conn));
 
                 if ($insert) {
@@ -102,6 +103,24 @@ include("conexion.php");
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Usuario</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="text" name="usuario"  class="form-control" placeholder="Usuario" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Contraseña</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="password" name="contrasena"  class="form-control" placeholder="Contraseña" required>
+                    </div>
+                </div>
+
+
+
+
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
                         <!-- Modal de Confirmación -->

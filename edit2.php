@@ -49,7 +49,6 @@ include("conexion.php");
             <hr />
 
             <?php
-            // Escapando y eliminando posibles códigos (HTML/JavaScript) en el parámetro id
             $id = mysqli_real_escape_string($conn, (strip_tags($_GET["id"], ENT_QUOTES)));
             $sql = mysqli_query($conn, "SELECT * FROM empleados WHERE id='$id'");
             if (mysqli_num_rows($sql) == 0) {
@@ -64,10 +63,10 @@ include("conexion.php");
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
                 $correo  = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
-              
+                
 
                 $update = mysqli_query($conn, "UPDATE empleados SET 
-                cedula = $cedula, nombres='$nombres', celular=$celular, correo='$correo', rol_id=$rol_id  WHERE id=$id") 
+                cedula = '$cedula', nombres='$nombres', celular='$celular', correo='$correo', rol_id='$rol_id' WHERE id='$id'") 
                 or die(mysqli_error());
 
                 if ($update) {
@@ -86,155 +85,71 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="cedula" id="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
-                            placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('cedula')">Editar</button>
-                        </div>
+                        <input type="text" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control" placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Nombre</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="nombres" value="<?php echo $row['nombres']; ?>" class="form-control"
-                            placeholder="Nombre" required readonly onkeypress="return soloLetras(event)">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('nombres')">Editar</button>
-                        </div>
+                        <input type="text" name="nombres" value="<?php echo $row['nombres']; ?>" class="form-control" placeholder="Nombre" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Celular</label>
                     <div class="col-sm-4 input-group">
-                        <input type="number" name="celular" value="<?php echo $row['celular']; ?>" class="form-control"
-                            placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('celular')">Editar</button>
-                        </div>
+                        <input type="number" name="celular" value="<?php echo $row['celular']; ?>" class="form-control" placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Correo</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="correo" value="<?php echo $row['correo']; ?>" class="form-control"
-                            placeholder="Correo" required readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('correo')">Editar</button>
-                        </div>
+                        <input type="text" name="correo" value="<?php echo $row['correo']; ?>" class="form-control" placeholder="Correo" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">rol_id</label>
+                    <label class="col-sm-3 control-label">Rol</label>
                     <div class="col-sm-4 input-group">
-                        <select name="rol_id" id="rol_id" class="form-control" required>
+                        <select name="rol_id" class="form-control" required>
                             <option value="">Seleccionar Rol</option>
-                            <option value="1">Rol 1</option>
-                            <option value="2">Rol 2</option>
+                            <option value="1" <?php if($row['rol_id'] == 1) echo 'selected'; ?>>Rol 1</option>
+                            <option value="2" <?php if($row['rol_id'] == 2) echo 'selected'; ?>>Rol 2</option>
                             <!-- Agrega más opciones según sea necesario -->
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
                 
-                </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">&nbsp;</label>
                     <div class="col-sm-6">
-                        <!-- Modal de Confirmación -->
-                        <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmarModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmarModalLabel">Confirmación</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ¿Está seguro de que desea guardar los cambios?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cancelar</button>
-                                        <button type="submit" name="save" class="btn btn-primary">Guardar
-                                            cambios</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Fin Modal de Confirmación -->
-
-                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                            data-target="#confirmarModal">Guardar datos</button>
-                        <a href="crudEmpleados.php" class="btn btn-sm btn-danger">Cancelar</a>
+                        <button type="submit" name="save" class="btn btn-primary">Guardar</button>
+                        <a href="crudEmpleados.php" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
-    <script>
-    function toggleReadOnly(fieldName) {
-        var inputField = document.getElementsByName(fieldName)[0];
-        inputField.readOnly = !inputField.readOnly;
-    }
-    </script>
-
-    <script>
-    function soloLetras(event) {
-        var key = event.keyCode;
-        return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
-    }
-    </script>
-    
-    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-    function validarCorreo() {
-        var correo = document.getElementsByName("correo")[0].value;
-        if (correo.indexOf("@") === -1) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Por favor, ingrese un correo válido.',
-            });
-            return false;
+        function validarCorreo() {
+            var correo = document.getElementsByName("correo")[0].value;
+            if (correo.indexOf("@") === -1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, ingrese un correo válido.',
+                });
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
     </script>
-   
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-    function validarFormulario() {
-        var rolId = document.getElementById("rol_id").value;
-        if (rolId === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Por favor, ingrese un Rol.',
-            });
-            return f            return false; // Evita que el formulario se envíe
-        }
-        return true; // Permite que el formulario se envíe si se ha seleccionado un rol
-    }
-    </script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script>
-    $('.date').datepicker({
-        format: 'dd-mm-yyyy',
-    })
+        $('.date').datepicker({
+            format: 'dd-mm-yyyy',
+        })
     </script>
 </body>
 

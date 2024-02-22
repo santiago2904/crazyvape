@@ -57,7 +57,7 @@ include("conexion.php");
             <?php
     if(isset($_GET['aksi']) == 'delete'){
     // escaping, additionally removing everything that could be (html/javascript-) code
-    $id = mysqli_real_escape_string($con,(strip_tags($_GET["id"],ENT_QUOTES)));
+    $id = mysqli_real_escape_string($conn,(strip_tags($_GET["id"],ENT_QUOTES)));
     $result = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula='$id'");
     if(mysqli_num_rows($result) == 0){
         echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
@@ -123,7 +123,7 @@ if(mysqli_num_rows($sql) == 0){
                     <td>';  if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"){
                         echo '<div class="acciones-buttons">
                             <a href="edit.php?id='.$row['id'].'" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href="index.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombre'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            <a href="crud.php?aksi=delete&id='.$row['id'].'" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos '.$row['nombre'].'?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </div>';
                     } 
                     echo '
