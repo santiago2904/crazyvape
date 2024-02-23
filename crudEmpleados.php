@@ -106,7 +106,7 @@ if(mysqli_num_rows($sql) == 0){
         <tr>
                     <td>'.$no.'</td>
                     <td>'.$row['cedula'].'</td>
-                    <td><a href="profile.php?id='.$row['id'].'"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> '.$row['nombres'].'</a></td>
+                    <td><a href="perfil_empleados.php?id='.$row['id'].'"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> '.$row['nombres'].'</a></td>
                     <td>'.$row['celular'].'</td>
                     <td>'.$row['correo'].'</td>
                     <td>'.$row['rol_id'].'</td>

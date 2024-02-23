@@ -97,8 +97,8 @@ include("conexion.php");
                     <div class="col-sm-4">
                         <select name="rol_id" class="form-control" required>
                             <option value="">Seleccionar Rol</option>
-                            <option value="1">Rol 1</option>
-                            <option value="2">Rol 2</option>
+                            <option value="1">ADMIN</option>
+                            <option value="2">Vendedor</option>
                             <!-- Agrega más opciones según sea necesario -->
                         </select>
                     </div>

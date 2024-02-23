@@ -111,8 +111,8 @@ include("conexion.php");
                     <div class="col-sm-4 input-group">
                         <select name="rol_id" class="form-control" required>
                             <option value="">Seleccionar Rol</option>
-                            <option value="1" <?php if($row['rol_id'] == 1) echo 'selected'; ?>>Rol 1</option>
-                            <option value="2" <?php if($row['rol_id'] == 2) echo 'selected'; ?>>Rol 2</option>
+                            <option value="1" <?php if($row['rol_id'] == 1) echo 'selected'; ?>>ADMIN</option>
+                            <option value="2" <?php if($row['rol_id'] == 2) echo 'selected'; ?>>Vendedor</option>
                             <!-- Agrega más opciones según sea necesario -->
                         </select>
                     </div>
