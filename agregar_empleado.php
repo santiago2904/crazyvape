@@ -63,7 +63,7 @@ include("conexion.php");
             }
             ?>
 
-            <form class="form-horizontal" action="" method="post" onsubmit="return validarCorreo();">
+            <form class="form-horizontal" action="" method="post" onsubmit="return validarCorreo() && validarContraseña();">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4">
@@ -112,14 +112,15 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Contraseña</label>
                     <div class="col-sm-4 input-group">
-                        <input type="password" name="contrasena"  class="form-control" placeholder="Contraseña" required>
+                        <input type="password" name="contrasena"  class="form-control" id="password" placeholder="Contraseña" required>
                     </div>
                 </div>
-
-
-
-
-
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Confirmar Contraseña</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="password" name="confirmar_contrasena"  class="form-control" id="confirm_password" placeholder="Confirmar Contraseña" required>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
@@ -160,30 +161,47 @@ include("conexion.php");
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    $('.date').datepicker({
-        format: 'dd-mm-yyyy',
-    })
-    </script>
+        $('.date').datepicker({
+            format: 'dd-mm-yyyy',
+        });
 
-    <script>
-    function soloLetras(event) {
-        var key = event.keyCode;
-        return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
-    }
-    </script>
+        function soloLetras(event) {
+            var key = event.keyCode;
+            return ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key == 32 || key == 225 || key == 193 || key == 233 || key == 201 || key == 237 || key == 205 || key == 243 || key == 211 || key == 250 || key == 218 || key == 241 || key == 209 || key == 252 || key == 220 || key == 252 || key == 220 || key == 32 || key == 46 || key == 8);
+        }
 
+        function validarCorreo() {
+            var correo = document.getElementsByName("correo")[0].value;
+            if (correo.indexOf("@") === -1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, ingrese un correo válido.',
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
     <script>
-    function validarCorreo() {
-        var correo = document.getElementsByName("correo")[0].value;
-        if (correo.indexOf("@") === -1) {
-            alert("Por favor, ingrese un correo válido.");
+    // Función para validar que las contraseñas coincidan
+    function validarContraseña() {
+        var password = document.getElementById("password").value;
+        var confirmarPassword = document.getElementById("confirm_password").value;
+
+        if (password !== confirmarPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden. Por favor, inténtelo de nuevo.',
+            });
             return false;
         }
         return true;
     }
-    </script>
-
+</script>
 </body>
 
 </html>
