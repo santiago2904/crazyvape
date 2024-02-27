@@ -16,8 +16,6 @@
             <li class="active"><a href="crudEmpleados.php">Lista de Empleados</a></li>
            
             <?php endif; ?>
-
-            <li><a href="add.php">Agregar datos</a></li>
         </ul>
         <!-- Mini perfil desplegable -->
         <ul class="nav navbar-nav navbar-right">

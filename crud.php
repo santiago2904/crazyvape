@@ -58,14 +58,25 @@ include("conexion.php");
     if(isset($_GET['aksi']) == 'delete'){
     // escaping, additionally removing everything that could be (html/javascript-) code
     $id = mysqli_real_escape_string($conn,(strip_tags($_GET["id"],ENT_QUOTES)));
-    $result = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula='$id'");
+    $result = mysqli_query($conn, "SELECT * FROM clientes WHERE id='$id'");
     if(mysqli_num_rows($result) == 0){
         echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
     }else{
-            $delete = mysqli_query($conn, "DELETE FROM clientes WHERE cedula='$id'");
-        if($delete){
-            echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminado correctamente.</div>';
-        }else{
+        $result_compras = mysqli_query($conn, "SELECT * FROM compras WHERE user_id='$id'");
+
+        // Eliminar las compras asociadas
+        while ($compra = mysqli_fetch_assoc($result_compras)) {
+            $id_compra = $compra['id'];
+            mysqli_query($conn, "DELETE FROM compras WHERE id='$id_compra'");
+            // Aquí puedes realizar otras acciones relacionadas con las compras si es necesario
+        }
+
+        // Eliminar el usuario después de eliminar las compras asociadas
+        $delete_user = mysqli_query($conn, "DELETE FROM clientes WHERE id='$id'");
+
+        if($delete_user){
+            echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminados correctamente, incluidas las compras asociadas.</div>';
+        } else {
             echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error, no se pudo eliminar los datos.</div>';
         }
     }
@@ -100,10 +111,39 @@ if(isset($_GET['filter']) && !empty($_GET['filter']) && $_GET['filter'] != ""){
 
     $filter_value = mysqli_real_escape_string($conn, $_GET['filter']);
     
-    $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula LIKE '$filter_value%'");
+    $sql = mysqli_query($conn, "SELECT
+        cl.id as id,
+        cl.nombre as nombre,
+        cl.cedula as cedula,
+        cl.numero as celular,
+        cl.correo as correo,
+        COUNT(c.id) AS cantidadCompras,
+        SUM(c.puntos) AS puntos,
+        SUM(c.valor) AS total
+    FROM clientes cl
+    LEFT JOIN compras c ON c.user_id = cl.id
+    WHERE cl.cedula LIKE '$filter_value%'
+    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo  
+    ORDER BY nombre ASC
+    LIMIT 10");
 
 }else{
-    $sql = mysqli_query($conn, "SELECT * FROM clientes ORDER BY nombre ASC LIMIT  10");
+
+    $sql = mysqli_query($conn,"SET SESSION sql_mode = ''");
+
+    $sql = mysqli_query($conn, "SELECT
+    cl.id as id,
+    cl.nombre as nombre,
+    cl.cedula as cedula,
+    cl.numero as celular,
+    cl.correo as correo,
+    COUNT(c.id) AS cantidadCompras,
+    SUM(c.puntos) AS puntos,
+    sum(c.valor) AS total
+    FROM clientes cl
+    left JOIN compras c on c.user_id = cl.id
+    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo 
+    ORDER BY nombre ASC LIMIT  10");
 }
 if(mysqli_num_rows($sql) == 0){
     echo '<tr><td colspan="8">No hay datos.</td></tr>';
@@ -114,8 +154,8 @@ if(mysqli_num_rows($sql) == 0){
         <tr>
                     <td>'.$no.'</td>
                     <td>'.$row['cedula'].'</td>
-                    <td><a href="perfil_cliente.php?id='.$row['id'].'"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> '.$row['nombre'].'</a></td>
-                    <td>'.$row['numero'].'</td>
+                    <td><a href="perfil_cliente.php?id='.$row['id'].'"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> '.utf8_decode($row['nombre']).'</a></td>
+                    <td>'.$row['celular'].'</td>
                     <td>'.$row['correo'].'</td>
                     <td>'.$row['cantidadCompras'].'</td>
                     <td>'.$row['puntos'].'</td>
@@ -136,6 +176,11 @@ if(mysqli_num_rows($sql) == 0){
 ?>
                 </table>
             </div>
+            <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+            <div class="text-right">
+                <a href="add.php" class="btn btn-primary">Agregar cliente</a>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
     <center>

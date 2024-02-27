@@ -65,12 +65,8 @@ include("conexion.php");
                 $nombre = mysqli_real_escape_string($conn, (strip_tags($_POST["nombre"], ENT_QUOTES)));
                 $numero = mysqli_real_escape_string($conn, (strip_tags($_POST["numero"], ENT_QUOTES)));
                 $correo  = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
-                $cantidadCompras = mysqli_real_escape_string($conn, (strip_tags($_POST["cantidadCompras"], ENT_QUOTES)));
-                $puntos = mysqli_real_escape_string($conn, (strip_tags($_POST["puntos"], ENT_QUOTES)));
-                $total = mysqli_real_escape_string($conn, (strip_tags($_POST["total"], ENT_QUOTES)));
-
                 $update = mysqli_query($conn, "UPDATE clientes SET 
-                cedula = $cedula, nombre='$nombre', numero=$numero, correo='$correo', cantidadCompras=$cantidadCompras, puntos=$puntos, total=$total WHERE id=$id") 
+                cedula = $cedula, nombre='$nombre', numero=$numero, correo='$correo' WHERE id=$id") 
                 or die(mysqli_error());
 
                 if ($update) {
@@ -90,7 +86,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="cedula" value="<?php echo $row['cedula']; ?>" class="form-control"
-                            placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
+                            placeholder="Cédula" required readonly oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('cedula')">Editar</button>
@@ -112,7 +108,7 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Número</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="numero" value="<?php echo $row['numero']; ?>" class="form-control"
-                            placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                            placeholder="Número" required readonly oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('numero')">Editar</button>
@@ -130,39 +126,7 @@ include("conexion.php");
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Cantidad de Compras</label>
-                    <div class="col-sm-4 input-group">
-                        <input type="number" name="cantidadCompras" value="<?php echo $row['cantidadCompras']; ?>"
-                            class="form-control" placeholder="Cantidad de Compras" required readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('cantidadCompras')">Editar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Puntos</label>
-                    <div class="col-sm-3 input-group">
-                        <input type="text" name="puntos" value="<?php echo $row['puntos']; ?>" class="form-control"
-                            placeholder="Puntos" required readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('puntos')">Editar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Valor total comprado</label>
-                    <div class="col-sm-3 input-group">
-                        <input type="number" name="total" value="<?php echo $row['total']; ?>" class="form-control"
-                            placeholder="Total valor gastado" required readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="toggleReadOnly('total')">Editar</button>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">&nbsp;</label>
                     <div class="col-sm-6">

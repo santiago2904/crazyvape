@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if(!isset($_SESSION['usuario'])){
@@ -12,7 +11,6 @@ if(!isset($_SESSION['usuario'])){
     session_destroy();
     die();
 }
-
 
 include("conexion.php");
 ?>
@@ -58,40 +56,42 @@ Email	 	 : info@obedalvarado.pw
             <hr />
 
             <?php
-			if(isset($_POST['add'])){
-				$nombre		     = mysqli_real_escape_string($con,(strip_tags($_POST["nombre"],ENT_QUOTES)));//Escanpando caracteres 
-				$numero	 = mysqli_real_escape_string($con,(strip_tags($_POST["numero"],ENT_QUOTES)));//Escanpando caracteres 
-				$correo	 = mysqli_real_escape_string($con,(strip_tags($_POST["correo"],ENT_QUOTES)));//Escanpando caracteres 
-				$celular	     = mysqli_real_escape_string($con,(strip_tags($_POST["celular"],ENT_QUOTES)));//Escanpando caracteres 
-				$telefono		 = mysqli_real_escape_string($con,(strip_tags($_POST["telefono"],ENT_QUOTES)));//Escanpando caracteres 
-				$puesto		 = mysqli_real_escape_string($con,(strip_tags($_POST["puesto"],ENT_QUOTES)));//Escanpando caracteres 
-				$estado			 = mysqli_real_escape_string($con,(strip_tags($_POST["estado"],ENT_QUOTES)));//Escanpando caracteres 
-				
-			
- 
-				$cek = mysqli_query($con, "SELECT * FROM empleados WHERE codigo='$codigo'");
-				if(mysqli_num_rows($cek) == 0){
-						$insert = mysqli_query($con, "INSERT INTO empleados(codigo, nombres, lugar_nacimiento, fecha_nacimiento, direccion, telefono, puesto, estado)
-															VALUES('$codigo','$nombres', '$lugar_nacimiento', '$fecha_nacimiento', '$direccion', '$telefono', '$puesto', '$estado')") or die(mysqli_error());
-						if($insert){
-							echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Bien hecho! Los datos han sido guardados con éxito.</div>';
-						}else{
-							echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error. No se pudo guardar los datos !</div>';
-						}
-					 
-				}else{
-					echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error. código exite!</div>';
-				}
-			}
-			?>
+            if(isset($_POST['add'])){
+                $nombres = mysqli_real_escape_string($conn, strip_tags($_POST["nombres"]));
+                $numero = mysqli_real_escape_string($conn, strip_tags($_POST["numero"]));
+                $correo = mysqli_real_escape_string($conn, strip_tags($_POST["correo"]));
+                $cedula = mysqli_real_escape_string($conn, strip_tags($_POST["cedula"]));
+
+                // Verificar si el cliente ya existe por cédula
+                $stmt = mysqli_prepare($conn, "SELECT * FROM clientes WHERE cedula = ?");
+                mysqli_stmt_bind_param($stmt, "s", $cedula);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+
+                if(mysqli_stmt_num_rows($stmt) == 0){
+                    // El cliente no existe, realizar la inserción
+                    $stmt_insert = mysqli_prepare($conn, "INSERT INTO clientes(nombre, numero, correo, cedula) VALUES (?, ?, ?, ?)");
+                    mysqli_stmt_bind_param($stmt_insert, "siss", $nombres, $numero, $correo, $cedula);
+                    $insert = mysqli_stmt_execute($stmt_insert);    
+
+                    if($insert){
+                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Bien hecho! Los datos han sido guardados con éxito.</div>';
+                    } else {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error. No se pudo guardar los datos !</div>';
+                        echo mysqli_error($conn); // Imprime el error de MySQL para depuración
+                    }
+
+                    mysqli_stmt_close($stmt_insert);
+                } else {
+                    // El cliente ya existe
+                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error. El cliente ya existe!</div>';
+                }
+
+                mysqli_stmt_close($stmt);
+            }
+            ?>
 
             <form class="form-horizontal" action="" method="post">
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Código</label>
-                    <div class="col-sm-2">
-                        <input type="text" name="codigo" class="form-control" placeholder="Código" required>
-                    </div>
-                </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Nombres</label>
                     <div class="col-sm-4">
@@ -99,49 +99,24 @@ Email	 	 : info@obedalvarado.pw
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Lugar de nacimiento</label>
+                    <label class="col-sm-3 control-label">Número</label>
                     <div class="col-sm-4">
-                        <input type="text" name="lugar_nacimiento" class="form-control"
-                            placeholder="Lugar de nacimiento" required>
+                        <input type="text" name="numero" class="form-control" placeholder="Número" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Fecha de nacimiento</label>
+                    <label class="col-sm-3 control-label">Correo</label>
                     <div class="col-sm-4">
-                        <input type="text" name="fecha_nacimiento" class="input-group date form-control" date=""
-                            data-date-format="dd-mm-yyyy" placeholder="00-00-0000" required>
+                        <input type="text" name="correo" class="form-control" placeholder="Correo" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Dirección</label>
-                    <div class="col-sm-3">
-                        <textarea name="direccion" class="form-control" placeholder="Dirección"></textarea>
+                    <label class="col-sm-3 control-label">Cédula</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="cedula" class="form-control" placeholder="Cédula" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Teléfono</label>
-                    <div class="col-sm-3">
-                        <input type="text" name="telefono" class="form-control" placeholder="Teléfono" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Puesto</label>
-                    <div class="col-sm-3">
-                        <input type="text" name="puesto" class="form-control" placeholder="Puesto" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Estado</label>
-                    <div class="col-sm-3">
-                        <select name="estado" class="form-control">
-                            <option value=""> ----- </option>
-                            <option value="1">Fijo</option>
-                            <option value="2">Contratado</option>
 
-                            <option value="3">Outsourcing</option>
-                        </select>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">&nbsp;</label>

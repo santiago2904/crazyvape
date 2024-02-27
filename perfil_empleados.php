@@ -47,7 +47,13 @@ include("conexion.php");
                 $empleado_id = $_GET['id'];
 
                 // Consultar la base de datos para obtener los detalles del empleado
-                $query = "SELECT * FROM empleados WHERE id = $empleado_id";
+                $query = "SELECT e.nombres as nombre,
+                e.cedula as cedula,
+                e.celular as celular,
+                e.correo as correo,
+                r.rol as rol
+                FROM empleados e
+                inner JOIN roles r on r.id = e.rol_id WHERE e.id = $empleado_id";
                 $resultado = mysqli_query($conn, $query);
 
                 // Verificar si se encontraron resultados
@@ -55,11 +61,11 @@ include("conexion.php");
                     $empleado = mysqli_fetch_assoc($resultado);
                     // Mostrar los detalles del empleado
                     echo '<h1>Perfil del Empleado</h1>';
-                    echo '<p><b>Nombre:</b> ' . $empleado['nombres'] . '</p>';
+                    echo '<p><b>Nombre:</b> ' . $empleado['nombre'] . '</p>';
                     echo '<p><b>Cédula:</b> ' . $empleado['cedula'] . '</p>';
                     echo '<p><b>Celular:</b> ' . $empleado['celular'] . '</p>';
                     echo '<p><b>Correo:</b> ' . $empleado['correo'] . '</p>';
-                    echo '<p><b>Rol:</b> ' . $empleado['rol_id'] . '</p>';
+                    echo '<p><b>Rol:</b> ' . $empleado['rol'] . '</p>';
 
                     // Continuar mostrando otros detalles del empleado según tu base de datos
                 } else {

@@ -46,7 +46,16 @@ include("conexion.php");
                 $cliente_id = $_GET['id'];
 
                 // Consultar la base de datos para obtener los detalles del cliente
-                $query = "SELECT * FROM clientes WHERE id = $cliente_id";
+                $query = "SELECT 
+                    cl.nombre as nombre,
+                    cl.cedula as cedula,
+                    cl.numero as celular,
+                    cl.correo as correo,
+                    COUNT(c.id) AS cantidadCompras,
+                    SUM(c.puntos) AS puntos,
+                    sum(c.valor) AS total
+                FROM clientes cl
+                left JOIN compras c on c.user_id = cl.id WHERE cl.id = $cliente_id";
                 $resultado = mysqli_query($conn, $query);
 
                 // Verificar si se encontraron resultados
@@ -56,7 +65,7 @@ include("conexion.php");
                     echo '<h1>Perfil del Cliente</h1>';
                     echo '<p><b>Nombre:</b> ' . $cliente['nombre'] . '</p>';
                     echo '<p><b>Cédula:</b> ' . $cliente['cedula'] . '</p>';
-                    echo '<p><b>Celular:</b> ' . $cliente['numero'] . '</p>';
+                    echo '<p><b>Celular:</b> ' . $cliente['celular'] . '</p>';
                     echo '<p><b>Correo:</b> ' . $cliente['correo'] . '</p>';
                     echo '<p><b>Cantidad de Compras:</b> ' . $cliente['cantidadCompras'] . '</p>';
                     echo '<p><b>Puntos Acumulados:</b> ' . $cliente['puntos'] . '</p>';
