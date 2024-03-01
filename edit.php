@@ -73,7 +73,10 @@ include("conexion.php");
                 or die(mysqli_error($conn));
 
                 if ($update) {
-                    header("Location: edit.php?id=".$id."&cambio=true");
+                    echo '<script type="text/javascript">';
+                    echo 'window.location.href = "edit.php?id=' . $id . '&cambio=true";';
+                    echo '</script>';
+                    exit;
                 } else {
                     echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo guardar los datos.</div>';
                 }

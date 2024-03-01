@@ -1,6 +1,7 @@
 <div class="container">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+            aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -11,7 +12,8 @@
     <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
             <li class="dropdown" id="comprasDropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
                     Compras <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -20,7 +22,8 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
                     Clientes <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -29,9 +32,10 @@
                     <li><a href="add.php">Agregar Cliente</a></li>
                 </ul>
             </li>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
+            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
                 <li class="dropdown" id="empleadosDropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">
                         Empleados <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -40,11 +44,13 @@
                     </ul>
                 </li>
             <?php endif; ?>
+            
         </ul>
         <!-- Mini perfil desplegable -->
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
                     <?php
                     if (isset($_SESSION['usuario'])) {
                         echo $_SESSION['usuario'];
@@ -54,15 +60,24 @@
                     ?>
                     <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu profile-dropdown">
                     <li>
-                        <p>Nombre: <?php echo $_SESSION["nombres"]; ?></p>
+                        <p><strong>Nombre:</strong>
+                            <?php echo $_SESSION["nombres"]; ?>
+                        </p>
                     </li>
                     <li>
-                        <p>Correo: <?php echo $_SESSION["correo"]; ?></p>
+                        <p><strong>Correo:</strong>
+                            <?php echo $_SESSION["correo"]; ?>
+                        </p>
                     </li>
+                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="configuracion.php">Configuración</a></li>
+                    <?php endif; ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
+                    
                 </ul>
             </li>
         </ul>

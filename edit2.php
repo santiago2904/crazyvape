@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['usuario'])){
-    echo'
+if (!isset($_SESSION['usuario'])) {
+    echo '
         <script>
             alert("Por favor iniciar sesión.");
             window.location = "index.php";
@@ -28,9 +28,9 @@ include("conexion.php");
     <link href="css/bootstrap-datepicker.css" rel="stylesheet">
     <link href="css/style_nav.css" rel="stylesheet">
     <style>
-    .content {
-        margin-top: 80px;
-    }
+        .content {
+            margin-top: 80px;
+        }
     </style>
 
     <!--[if lt IE 9]>
@@ -41,7 +41,7 @@ include("conexion.php");
 
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-        <?php include("nav.php");?>
+        <?php include("nav.php"); ?>
     </nav>
     <div class="container">
         <div class="content">
@@ -57,20 +57,22 @@ include("conexion.php");
                 $row = mysqli_fetch_assoc($sql);
             }
             if (isset($_POST['save'])) {
-                
+
                 $cedula = mysqli_real_escape_string($conn, (strip_tags($_POST["cedula"], ENT_QUOTES)));
                 $nombres = mysqli_real_escape_string($conn, (strip_tags($_POST["nombres"], ENT_QUOTES)));
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
                 $correo  = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
-                
+
 
                 $update = mysqli_query($conn, "UPDATE empleados SET 
-                cedula = '$cedula', nombres='$nombres', celular='$celular', correo='$correo', rol_id='$rol_id' WHERE id='$id'") 
-                or die(mysqli_error());
-
+                cedula = '$cedula', nombres='$nombres', celular='$celular', correo='$correo', rol_id='$rol_id' WHERE id='$id'")
+                    or die(mysqli_error());
                 if ($update) {
-                    header("Location: edit2.php?id=".$id."&cambio=true");
+                    echo '<script type="text/javascript">';
+                    echo 'window.location.href = "edit2.php?id=' . $id . '&cambio=true";';
+                    echo '</script>';
+                    exit;
                 } else {
                     echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo guardar los datos.</div>';
                 }
@@ -81,7 +83,7 @@ include("conexion.php");
             }
             ?>
 
-            <form class="form-horizontal" action="" method="post" onsubmit="return validarCorreo();">
+            <form class="form-horizontal" id="editarForm" action="" method="post" onsubmit="return validarCorreo();">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4 input-group">
@@ -111,21 +113,44 @@ include("conexion.php");
                     <div class="col-sm-4 input-group">
                         <select name="rol_id" class="form-control" required>
                             <option value="">Seleccionar Rol</option>
-                            <option value="1" <?php if($row['rol_id'] == 1) echo 'selected'; ?>>ADMIN</option>
-                            <option value="2" <?php if($row['rol_id'] == 2) echo 'selected'; ?>>Vendedor</option>
+                            <option value="1" <?php if ($row['rol_id'] == 1) echo 'selected'; ?>>ADMIN</option>
+                            <option value="2" <?php if ($row['rol_id'] == 2) echo 'selected'; ?>>Vendedor</option>
                             <!-- Agrega más opciones según sea necesario -->
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">&nbsp;</label>
                     <div class="col-sm-6">
-                        <button type="submit" name="save" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmarModal">Guardar</button>
                         <a href="crudEmpleados.php" class="btn btn-danger">Cancelar</a>
                     </div>
                 </div>
             </form>
+
+            <!-- Modal de Confirmación -->
+            <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="confirmarModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmarModalLabel">Confirmación</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Está seguro de que desea guardar los cambios?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" name="save" form="editarForm" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal de Confirmación -->
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
