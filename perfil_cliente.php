@@ -52,8 +52,8 @@ include("conexion.php");
                     cl.numero as celular,
                     cl.correo as correo,
                     COUNT(c.id) AS cantidadCompras,
-                    SUM(c.puntos) AS puntos,
-                    sum(c.valor) AS total
+                    (cl.puntos) AS puntos,
+                    IFNULL(SUM(c.valor), 0) AS total
                 FROM clientes cl
                 left JOIN compras c on c.user_id = cl.id WHERE cl.id = $cliente_id";
                 $resultado = mysqli_query($conn, $query);

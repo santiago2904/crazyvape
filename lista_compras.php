@@ -22,7 +22,7 @@ include("conexion.php");
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Datos de clientes</title>
+    <title>Compras</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -53,43 +53,29 @@ include("conexion.php");
     <script>
         // Obtén el elemento por su ID
         var listaCompras = document.getElementById("comprasLista");
-        var listaClientes = document.getElementById("clientesLista");
-        var listaEmpleados = document.getElementById("empleadosLista");
+        var listaClientes = document.getElementById("listaClientes");
+        var listaEmpleados = document.getElementById("listaEmpleados");
 
-        listaCompras.classList.remove("active");
-        listaClientes.classList.add("active");
+        listaCompras.classList.add("active");
+        listaClientes.classList.remove("active");
         listaEmpleados.classList.remove("active");
     </script>
     <div class="container">
         <div class="content">
-            <h2>Lista de Clientes</h2>
+            <h2>Lista de Compras</h2>
             <hr />
 
             <?php
             if (isset($_GET['aksi']) == 'delete') {
                 // escaping, additionally removing everything that could be (html/javascript-) code
                 $id = mysqli_real_escape_string($conn, (strip_tags($_GET["id"], ENT_QUOTES)));
-                $result = mysqli_query($conn, "SELECT * FROM clientes WHERE id='$id'");
-                if (mysqli_num_rows($result) == 0) {
-                    echo '<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No se encontraron datos.</div>';
+
+                $delete_compra = mysqli_query($conn, "DELETE FROM compras WHERE id='$id'");
+
+                if ($delete_compra) {
+                    echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>compra eliminada</div>';
                 } else {
-                    $result_compras = mysqli_query($conn, "SELECT * FROM compras WHERE user_id='$id'");
-
-                    // Eliminar las compras asociadas
-                    while ($compra = mysqli_fetch_assoc($result_compras)) {
-                        $id_compra = $compra['id'];
-                        mysqli_query($conn, "DELETE FROM compras WHERE id='$id_compra'");
-                        // Aquí puedes realizar otras acciones relacionadas con las compras si es necesario
-                    }
-
-                    // Eliminar el usuario después de eliminar las compras asociadas
-                    $delete_user = mysqli_query($conn, "DELETE FROM clientes WHERE id='$id'");
-
-                    if ($delete_user) {
-                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Datos eliminados correctamente, incluidas las compras asociadas.</div>';
-                    } else {
-                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error, no se pudo eliminar los datos.</div>';
-                    }
+                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error, no se pudo eliminar los datos.</div>';
                 }
             }
             ?>
@@ -108,11 +94,9 @@ include("conexion.php");
                         <th>No</th>
                         <th>Cédula</th>
                         <th>Nombre</th>
-                        <th>Celular</th>
-                        <th>Correo</th>
-                        <th>Cantidad Compras</th>
-                        <th>Puntos</th>
-                        <th>Total</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Valor</th>
                         <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
                             <th class="acciones-cell">Acciones</th>
                         <?php endif; ?>
@@ -123,37 +107,34 @@ include("conexion.php");
                         $filter_value = mysqli_real_escape_string($conn, $_GET['filter']);
 
                         $sql = mysqli_query($conn, "SELECT
-        cl.id as id,
-        cl.nombre as nombre,
+        cl.id as clienteId,
+        c.id as compraId,
+        c.valor as valor,
+        IFNULL(c.descripcion, 'sin descripción') AS descripcion,
+        c.fecha as fecha,
         cl.cedula as cedula,
-        cl.numero as celular,
-        cl.correo as correo,
-        COUNT(c.id) AS cantidadCompras,
-        (cl.puntos) AS puntos,
-        IFNULL(SUM(c.valor), 0) AS total
-    FROM clientes cl
-    LEFT JOIN compras c ON c.user_id = cl.id
+        cl.nombre as nombre
+    FROM compras c
+    INNER JOIN clientes cl on c.user_id = cl.id
     WHERE cl.cedula LIKE '$filter_value%'
-    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo  
-    ORDER BY nombre ASC
-    LIMIT 10");
+    GROUP BY compraId, fecha
+    ORDER BY fecha DESC LIMIT  10;");
                     } else {
 
                         $sql = mysqli_query($conn, "SET SESSION sql_mode = ''");
 
                         $sql = mysqli_query($conn, "SELECT
-    cl.id as id,
-    cl.nombre as nombre,
-    cl.cedula as cedula,
-    cl.numero as celular,
-    cl.correo as correo,
-    COUNT(c.id) AS cantidadCompras,
-    (cl.puntos) AS puntos,
-    IFNULL(SUM(c.valor), 0) AS total
-    FROM clientes cl
-    left JOIN compras c on c.user_id = cl.id
-    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo 
-    ORDER BY nombre ASC LIMIT  10");
+        cl.id as clienteId,
+        c.id as compraId,
+        c.valor as valor,
+        IFNULL(c.descripcion, 'sin descripción') AS descripcion,
+        c.fecha as fecha,
+        cl.cedula as cedula,
+        cl.nombre as nombre
+    FROM compras c
+    INNER JOIN clientes cl on c.user_id = cl.id
+    GROUP BY compraId, fecha
+    ORDER BY fecha DESC LIMIT  10;");
                     }
                     if (mysqli_num_rows($sql) == 0) {
                         echo '<tr><td colspan="8">No hay datos.</td></tr>';
@@ -164,17 +145,14 @@ include("conexion.php");
         <tr>
                     <td>' . $no . '</td>
                     <td>' . $row['cedula'] . '</td>
-                    <td><a href="perfil_cliente.php?id=' . $row['id'] . '"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . utf8_decode($row['nombre']) . '</a></td>
-                    <td>' . $row['celular'] . '</td>
-                    <td>' . $row['correo'] . '</td>
-                    <td>' . $row['cantidadCompras'] . '</td>
-                    <td>' . $row['puntos'] . '</td>
-                    <td>' . $row['total'] . '</td>
+                    <td><a href="perfil_cliente.php?id=' . $row['clienteId'] . '"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . utf8_decode($row['nombre']) . '</a></td>
+                    <td>' . $row['descripcion'] . '</td>
+                    <td>' . $row['fecha'] . '</td>
+                    <td>' . $row['valor'] . '</td>
                     <td>';
                             if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") {
                                 echo '<div class="acciones-buttons">
-                            <a href="edit.php?id=' . $row['id'] . '" title="Editar datos" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href="crud.php?aksi=delete&id=' . $row['id'] . '" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar los datos ' . $row['nombre'] . '?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            <a href="lista_compras.php?aksi=delete&id=' . $row['compraId'] . '" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar esta compra de ' . $row['nombre'] . '?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </div>';
                             }
                             echo '

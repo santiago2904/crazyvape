@@ -10,11 +10,35 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="crud.php">Lista de Clientes</a></li>
-            <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+            <li class="dropdown" id="comprasDropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Compras <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="lista_compras.php">Lista de Compras</a></li>
+                    <li><a href="add_compra.php">Agregar Compra</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Clientes <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="crud.php">Lista de Clientes</a></li>
 
-            <li class="active"><a href="crudEmpleados.php">Lista de Empleados</a></li>
-           
+                    <li><a href="add.php">Agregar Cliente</a></li>
+                </ul>
+            </li>
+            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
+                <li class="dropdown" id="empleadosDropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Empleados <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="crudEmpleados.php">Lista de Empleados</a></li>
+                        <li><a href="agregar_empleado.php">Agregar Empleado</a></li>
+                    </ul>
+                </li>
             <?php endif; ?>
         </ul>
         <!-- Mini perfil desplegable -->
@@ -22,17 +46,21 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php
-                        if(isset($_SESSION['usuario'])) {
-                            echo $_SESSION['usuario'];
-                        } else {
-                            echo 'Mi Perfil';
-                        }
+                    if (isset($_SESSION['usuario'])) {
+                        echo $_SESSION['usuario'];
+                    } else {
+                        echo 'Mi Perfil';
+                    }
                     ?>
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><p>Nombre: <?php echo $_SESSION["nombres"]; ?></p></li>
-                    <li><p>Correo: <?php echo $_SESSION["correo"]; ?></p></li>
+                    <li>
+                        <p>Nombre: <?php echo $_SESSION["nombres"]; ?></p>
+                    </li>
+                    <li>
+                        <p>Correo: <?php echo $_SESSION["correo"]; ?></p>
+                    </li>
                     <li role="separator" class="divider"></li>
                     <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
                 </ul>

@@ -28,7 +28,7 @@ Email	 	 : info@obedalvarado.pw
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Latihan MySQLi</title>
+    <title>Agregar cliente</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -52,7 +52,7 @@ Email	 	 : info@obedalvarado.pw
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Datos del empleados &raquo; Agregar datos</h2>
+            <h2>Agregar cliente</h2>
             <hr />
 
             <?php

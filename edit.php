@@ -2,10 +2,10 @@
 
 session_start();
 
-if(!isset($_SESSION['usuario'])){
+if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN" ){
     echo'
         <script>
-            alert("Por favor iniciar sesión.");
+            alert("Por favor iniciar sesión como un administrador.");
             window.location = "login2.php";
         </script>
     ';
@@ -65,9 +65,12 @@ include("conexion.php");
                 $nombre = mysqli_real_escape_string($conn, (strip_tags($_POST["nombre"], ENT_QUOTES)));
                 $numero = mysqli_real_escape_string($conn, (strip_tags($_POST["numero"], ENT_QUOTES)));
                 $correo  = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
+
+                $puntos  = mysqli_real_escape_string($conn, (strip_tags($_POST["puntos"], ENT_QUOTES)));
+
                 $update = mysqli_query($conn, "UPDATE clientes SET 
-                cedula = $cedula, nombre='$nombre', numero=$numero, correo='$correo' WHERE id=$id") 
-                or die(mysqli_error());
+                cedula = $cedula, nombre='$nombre', numero=$numero, correo='$correo', puntos = '$puntos' WHERE id=$id") 
+                or die(mysqli_error($conn));
 
                 if ($update) {
                     header("Location: edit.php?id=".$id."&cambio=true");
@@ -123,6 +126,18 @@ include("conexion.php");
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary"
                                 onclick="toggleReadOnly('correo')">Editar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Puntos</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="text" name="puntos" value="<?php echo $row['puntos']; ?>" class="form-control"
+                            placeholder="puntos" required readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="toggleReadOnly('puntos')">Editar</button>
                         </div>
                     </div>
                 </div>

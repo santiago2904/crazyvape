@@ -2,10 +2,10 @@
 session_start();
 
 // Verificar si el usuario ha iniciado sesión
-if(!isset($_SESSION['usuario'])){
+if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN"){
     echo'
         <script>
-            alert("Por favor iniciar sesión.");
+            alert("Por favor iniciar sesión como un administrador.");
             window.location = "login2.php";
         </script>
     ';

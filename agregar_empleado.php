@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['usuario'])){
+if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN" ){
     echo'
         <script>
-            alert("Por favor iniciar sesión.");
+            alert("Por favor iniciar sesión como un administrador.");
             window.location = "login2.php";
         </script>
     ';
@@ -40,11 +40,12 @@ include("conexion.php");
     </nav>
     <div class="container">
         <div class="content">
-            <h2>Agregar Nuevo Empleado</h2>
+            <h2>Agregar empleado</h2>
             <hr />
 
             <?php
             if (isset($_POST['save'])) {
+                
                 $cedula = mysqli_real_escape_string($conn, (strip_tags($_POST["cedula"], ENT_QUOTES)));
                 $nombres = mysqli_real_escape_string($conn, (strip_tags($_POST["nombres"], ENT_QUOTES)));
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
@@ -52,13 +53,22 @@ include("conexion.php");
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
                 $usuario = mysqli_real_escape_string($conn, (strip_tags($_POST["usuario"], ENT_QUOTES)));
                 $contrasena = mysqli_real_escape_string($conn, (strip_tags($_POST["contrasena"], ENT_QUOTES)));
-                $insert = mysqli_query($conn, "INSERT INTO empleados (cedula, nombres, celular, correo, rol_id, usuario, contrasena) VALUES ('$cedula', '$nombres', '$celular', '$correo', '$rol_id', '$usuario', '$contrasena')")
-                or die(mysqli_error($conn));
-
-                if ($insert) {
-                    echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Empleado agregado correctamente.</div>';
+                
+                $consulta_existencia = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula = '$cedula'");
+    
+                if (mysqli_num_rows($consulta_existencia) > 0) {
+                    // La cédula ya está en uso, mostrar mensaje de error
+                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>La cédula ya está registrada para otro empleado.</div>';
                 } else {
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo agregar el empleado.</div>';
+                    // La cédula no está en uso, proceder con la inserción
+                    $insert = mysqli_query($conn, "INSERT INTO empleados (nombres, cedula, celular, usuario, contrasena, correo, rol_id) VALUES ('$nombres', '$cedula', '$celular', '$usuario', '$contrasena', '$correo', '$rol_id')")
+                    or die(mysqli_error($conn));
+            
+                    if ($insert) {
+                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Empleado agregado correctamente.</div>';
+                    } else {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo agregar el empleado.</div>';
+                    }
                 }
             }
             ?>
