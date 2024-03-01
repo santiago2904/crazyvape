@@ -6,7 +6,7 @@ if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN" ){
     echo'
         <script>
             alert("Por favor iniciar sesión como un administrador.");
-            window.location = "login2.php";
+            window.location = "index.php";
         </script>
     ';
     session_destroy();

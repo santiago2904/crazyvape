@@ -38,7 +38,7 @@
         }
     }
     
-require 'login2.php';
+require 'index.php';
 
 
 ?>
