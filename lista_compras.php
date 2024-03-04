@@ -119,7 +119,7 @@ include("conexion.php");
         c.fecha as fecha,
         cl.cedula as cedula,
         cl.nombre as nombre,
-        e.ususario as vendedor
+        e.usuario as vendedor
     FROM compras c
     INNER JOIN clientes cl on c.user_id = cl.id
     Inner JOIN empleados e on c.vendedor_id = e.id
