@@ -22,26 +22,37 @@
 
 .profile-dropdown a:hover {
   text-decoration: none; /* Sin subrayado al pasar el mouse */
-  color: #EEEEEE; /* Cambio de color al pasar el mouse */
+  color: #4b4b4b; /* Cambio de color al pasar el mouse */
+}
+
+.select:hover {
+  background-color: #4b4b4b; /* Cambio de color al pasar el mouse */
+  color: #ff0000; /* Cambio de color del texto al pasar el mouse */
+}
+.select{
+ /* Cambio de color al pasar el mouse */
+  color: white; /* Cambio de color del texto al pasar el mouse */
 }
 
 /* Resto de tus estilos navbar-default */
 .navbar-default {
 background-color: #5C97D2; /* Cambio de color de fondo */
-border-color: #3A6F99; /* Cambio de color del borde */
+border-color: #3A6F99;
+font-size: 25px; /* Cambio de color del borde */
 }
 .navbar-default .navbar-brand {
 color: #FFFFFF; /* Cambio de color del texto de la marca */
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-color: #FFFFFF; /* Cambio de color del texto de la marca al pasar el mouse o en el foco */
+color: #ffffff; /* Cambio de color del texto de la marca al pasar el mouse o en el foco */
 }
 .navbar-default .navbar-text,
 .navbar-default .navbar-nav > li > a,
 .navbar-default .navbar-toggle .icon-bar,
 .navbar-default .navbar-link {
-color: #FFFFFF; /* Cambio de color del texto de la barra de navegación */
+  font-size: 20px;
+  color: #FFFFFF; /* Cambio de color del texto de la barra de navegación */
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus,
@@ -50,7 +61,7 @@ color: #FFFFFF; /* Cambio de color del texto de la barra de navegación */
 .navbar-default .navbar-nav > .active > a:focus,
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-color: #FFFFFF; /* Cambio de color del texto de navegación al pasar el mouse o en el foco */
+color: #ffffff; /* Cambio de color del texto de navegación al pasar el mouse o en el foco */
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .open > a,

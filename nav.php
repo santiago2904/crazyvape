@@ -1,7 +1,6 @@
 <div class="container">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-            aria-expanded="false" aria-controls="navbar">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -12,8 +11,7 @@
     <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
             <li class="dropdown" id="comprasDropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     Compras <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -22,8 +20,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     Clientes <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -32,10 +29,9 @@
                     <li><a href="add.php">Agregar Cliente</a></li>
                 </ul>
             </li>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
                 <li class="dropdown" id="empleadosDropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Empleados <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -44,13 +40,13 @@
                     </ul>
                 </li>
             <?php endif; ?>
-            
+
         </ul>
         <!-- Mini perfil desplegable -->
         <ul class="nav navbar-nav navbar-right">
+            <li style="color: white; font-size: 20px; margin-top: 7%; ;"> Paris </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php
                     if (isset($_SESSION['usuario'])) {
                         echo $_SESSION['usuario'];
@@ -71,13 +67,17 @@
                             <?php echo $_SESSION["correo"]; ?>
                         </p>
                     </li>
-                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN"): ?>
+                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
                         <li role="separator" class="divider"></li>
-                        <li><a href="configuracion.php">Configuración</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="configuracion.php" style="color: white;">Configuración</a>
+                        </li>
                     <?php endif; ?>
                     <li role="separator" class="divider"></li>
-                    <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
-                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="cerrar_sesion.php" style="color: white;">Cerrar Sesión</a>
+                    </li>
+
                 </ul>
             </li>
         </ul>

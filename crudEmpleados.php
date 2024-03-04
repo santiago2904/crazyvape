@@ -19,7 +19,8 @@ include("conexion.php");
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Datos de clientes</title>
@@ -150,7 +151,7 @@ include("conexion.php");
         </div>
     </div>
     <center>
-        <p>&copy; Desarrollado por santiago palacio <?php echo date("Y"); ?></p </center>
+        <p>&copy; Desarrollado por santiago palacio para paris fragances <?php echo date("Y"); ?></p </center>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 </body>

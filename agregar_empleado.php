@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN" ){
-    echo'
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] != "ADMIN") {
+    echo '
         <script>
             alert("Por favor iniciar sesión como un administrador.");
             window.location = "index.php";
@@ -18,7 +18,8 @@ include("conexion.php");
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Agregar Empleado</title>
@@ -28,15 +29,15 @@ include("conexion.php");
     <link href="css/bootstrap-datepicker.css" rel="stylesheet">
     <link href="css/style_nav.css" rel="stylesheet">
     <style>
-    .content {
-        margin-top: 80px;
-    }
+        .content {
+            margin-top: 80px;
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-        <?php include("nav.php");?>
+        <?php include("nav.php"); ?>
     </nav>
     <div class="container">
         <div class="content">
@@ -45,7 +46,7 @@ include("conexion.php");
 
             <?php
             if (isset($_POST['save'])) {
-                
+
                 $cedula = mysqli_real_escape_string($conn, (strip_tags($_POST["cedula"], ENT_QUOTES)));
                 $nombres = mysqli_real_escape_string($conn, (strip_tags($_POST["nombres"], ENT_QUOTES)));
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
@@ -53,17 +54,17 @@ include("conexion.php");
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
                 $usuario = mysqli_real_escape_string($conn, (strip_tags($_POST["usuario"], ENT_QUOTES)));
                 $contrasena = mysqli_real_escape_string($conn, (strip_tags($_POST["contrasena"], ENT_QUOTES)));
-                
-                $consulta_existencia = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula = '$cedula'");
-    
+
+                $consulta_existencia = mysqli_query($conn, "SELECT * FROM empleados WHERE cedula = '$cedula' or usuario = '$usuario' or correo = '$correo'");
+
                 if (mysqli_num_rows($consulta_existencia) > 0) {
                     // La cédula ya está en uso, mostrar mensaje de error
                     echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>La cédula ya está registrada para otro empleado.</div>';
                 } else {
                     // La cédula no está en uso, proceder con la inserción
                     $insert = mysqli_query($conn, "INSERT INTO empleados (nombres, cedula, celular, usuario, contrasena, correo, rol_id) VALUES ('$nombres', '$cedula', '$celular', '$usuario', '$contrasena', '$correo', '$rol_id')")
-                    or die(mysqli_error($conn));
-            
+                        or die(mysqli_error($conn));
+
                     if ($insert) {
                         echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Empleado agregado correctamente.</div>';
                     } else {
@@ -77,29 +78,25 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Cédula</label>
                     <div class="col-sm-4">
-                        <input type="text" name="cedula" class="form-control"
-                            placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
+                        <input type="text" name="cedula" class="form-control" placeholder="Cédula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Nombre</label>
                     <div class="col-sm-4">
-                        <input type="text" name="nombres" class="form-control"
-                            placeholder="Nombre" required onkeypress="return soloLetras(event)">
+                        <input type="text" name="nombres" class="form-control" placeholder="Nombre" required onkeypress="return soloLetras(event)">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Celular</label>
                     <div class="col-sm-4">
-                        <input type="number" name="celular" class="form-control"
-                            placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                        <input type="number" name="celular" class="form-control" placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Correo</label>
                     <div class="col-sm-4">
-                        <input type="text" name="correo" class="form-control"
-                            placeholder="Correo" required>
+                        <input type="text" name="correo" class="form-control" placeholder="Correo" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -116,27 +113,26 @@ include("conexion.php");
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Usuario</label>
                     <div class="col-sm-4 input-group">
-                        <input type="text" name="usuario"  class="form-control" placeholder="Usuario" required>
+                        <input type="text" name="usuario" class="form-control" placeholder="Usuario" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Contraseña</label>
                     <div class="col-sm-4 input-group">
-                        <input type="password" name="contrasena"  class="form-control" id="password" placeholder="Contraseña" required>
+                        <input type="password" name="contrasena" class="form-control" id="password" placeholder="Contraseña" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Confirmar Contraseña</label>
                     <div class="col-sm-4 input-group">
-                        <input type="password" name="confirmar_contrasena"  class="form-control" id="confirm_password" placeholder="Confirmar Contraseña" required>
+                        <input type="password" name="confirmar_contrasena" class="form-control" id="confirm_password" placeholder="Confirmar Contraseña" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
                         <!-- Modal de Confirmación -->
-                        <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog"
-                            aria-labelledby="confirmarModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="confirmarModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -149,8 +145,7 @@ include("conexion.php");
                                         ¿Está seguro de que desea agregar este empleado?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         <button type="submit" name="save" class="btn btn-primary">Agregar
                                             empleado</button>
                                     </div>
@@ -159,8 +154,7 @@ include("conexion.php");
                         </div>
                         <!-- Fin Modal de Confirmación -->
 
-                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                            data-target="#confirmarModal">Guardar</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#confirmarModal">Guardar</button>
                         <a href="crudEmpleados.php" class="btn btn-sm btn-danger">Cancelar</a>
                     </div>
                 </div>
@@ -196,22 +190,22 @@ include("conexion.php");
         }
     </script>
     <script>
-    // Función para validar que las contraseñas coincidan
-    function validarContraseña() {
-        var password = document.getElementById("password").value;
-        var confirmarPassword = document.getElementById("confirm_password").value;
+        // Función para validar que las contraseñas coincidan
+        function validarContraseña() {
+            var password = document.getElementById("password").value;
+            var confirmarPassword = document.getElementById("confirm_password").value;
 
-        if (password !== confirmarPassword) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Las contraseñas no coinciden. Por favor, inténtelo de nuevo.',
-            });
-            return false;
+            if (password !== confirmarPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden. Por favor, inténtelo de nuevo.',
+                });
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
-</script>
+    </script>
 </body>
 
 </html>

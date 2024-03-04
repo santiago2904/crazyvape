@@ -19,7 +19,8 @@ include("conexion.php");
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>agregar compra</title>
@@ -32,7 +33,13 @@ include("conexion.php");
         .content {
             margin-top: 80px;
         }
+
+        .custom-alert {
+            font-size: 25px;
+        }
     </style>
+
+
 
     <!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -41,6 +48,77 @@ include("conexion.php");
 </head>
 
 <body>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
+
+    <script>
+        function validarCedula() {
+            // Obtén el valor de la cédula del input
+            var cedula = document.getElementsByName("cedula")[0].value;
+
+            // Realiza una solicitud al servidor para validar la cédula
+            fetch('validar_cedula.php?cedula=' + cedula)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Cédula válida') {
+                        // Utiliza SweetAlert2 para mostrar una alerta bonita
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Cédula válida',
+                            html: `<div class="swal2-large-text custom-font-size">Cliente: ${data.nombre}<br>Puntos: ${data.puntos}</div>`,
+                            confirmButtonText: 'Aceptar',
+                            customClass: {
+                                container: 'swal2-lg', // Tamaño de la ventana (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                                content: 'swal2-xl', // Tamaño del contenido (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                                confirmButton: 'swal2-btn-custom'
+                            }
+                        });
+                    } else {
+                        // Muestra el mensaje de la validación
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            html: `<div class="swal2-large-text custom-font-size"> ${data.message}</div>`,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                container: 'swal2-lg', // Tamaño de la ventana (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                                content: 'swal2-xl', // Tamaño del contenido (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                                confirmButton: 'swal2-btn-custom'
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Muestra una alerta de error genérica
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al procesar la solicitud',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            container: 'swal2-lg', // Tamaño de la ventana (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                            content: 'swal2-xl', // Tamaño del contenido (puedes usar 'swal2-sm', 'swal2-lg', etc.)
+                            confirmButton: 'swal2-btn-custom'
+                        }
+                    });
+                });
+        }
+    </script>
+    <style>
+        .custom-font-size {
+            font-size: 20px;
+        }
+
+        .swal2-btn-custom {
+            font-size: 18px !important;
+            /* Ajusta el tamaño del botón según tus preferencias */
+        }
+    </style>
     <nav class="navbar navbar-default navbar-fixed-top">
         <?php include("nav.php"); ?>
     </nav>
@@ -57,13 +135,14 @@ include("conexion.php");
                 $descripcion = mysqli_real_escape_string($conn, strip_tags($_POST["descripcion"]));
                 $puntos = mysqli_real_escape_string($conn, strip_tags($_POST["puntos"]));
                 $fecha = date("Y-m-d H:i:s");
+                $vendedor_id = $_SESSION['id'];
 
                 // Verificar si el cliente ya existe por cédula
                 $consulta_existencia = mysqli_query($conn, "SELECT * FROM clientes WHERE cedula = '$cedula'");
 
                 if (mysqli_num_rows($consulta_existencia) == 0) {
                     // La cédula ya está en uso, mostrar mensaje de error
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No hay un cliente registrado con esa cédula</div>';
+                    echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No hay un cliente registrado con esa cédula</div>';
                 } else {
                     // hacerla insercion en la tabla compras y actualizar los puntos del cliente
 
@@ -83,10 +162,10 @@ include("conexion.php");
                     $comprasDiariasCliente = mysqli_fetch_array($consultaComprasDiarias)[0];
 
                     if ($comprasDiariasCliente >= $puntos_cambiar[1]) {
-                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>El cliente ya ha alcanzado el límite de compras diarias</div>';
+                        echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>El cliente ya ha alcanzado el límite de compras diarias</div>';
                     } elseif (($puntos == 0) || !isset($puntos)) {
 
-                        $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1')");
+                        $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id, vendedor_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1', '$vendedor_id')");
 
                         // de la tabla condiciones obtener la columna puntosCambiar para saber el valor que equivale a un punto
 
@@ -98,24 +177,24 @@ include("conexion.php");
                             $puntos_finales = $puntos_generados + $puntos_cliente;
                             $update = mysqli_query($conn, "UPDATE clientes SET puntos = '$puntos_finales' WHERE id = '$id_cliente'");
                             if ($update) {
-                                echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito</div>';
+                                echo '<div class="alert alert-success alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito</div>';
                                 //terminar la ejecucion del script
 
                             } else {
-                                echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
+                                echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
                             }
                         } else {
-                            echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
+                            echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
                         }
                     } else {
                         if ($puntos_cliente < $puntos) {
-                            echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No tiene suficientes puntos para redimir</div>';
+                            echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No tiene suficientes puntos para redimir</div>';
                         } else {
                             if ($puntos == 15 && $puntos_cliente >= 15) {
 
                                 $bono = 10000;
                                 $valor = $valor - $bono;
-                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1')");
+                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id, vendedor_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1', '$vendedor_id')");
 
                                 $puntos_generados = $valor / $puntos_cambiar[0];
 
@@ -124,20 +203,20 @@ include("conexion.php");
                                     $puntos_finales = $puntos_generados + $puntos_cliente - $puntos;
                                     $update = mysqli_query($conn, "UPDATE clientes SET puntos = '$puntos_finales' WHERE id = '$id_cliente'");
                                     if ($update) {
-                                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagado ' . $valor . '</div>';
+                                        echo '<div class="alert alert-success alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagado ' . $valor . '</div>';
                                         //terminar la ejecucion del script
 
                                     } else {
-                                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
+                                        echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
                                     }
                                 } else {
-                                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
+                                    echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
                                 }
                             } elseif ($puntos == 25 && $puntos_cliente >= 25) {
 
                                 $bono = 20000;
                                 $valor = $valor - $bono;
-                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1')");
+                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id, vendedor_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1', '$vendedor_id')");
 
                                 $puntos_generados = $valor / $puntos_cambiar[0];
 
@@ -146,19 +225,19 @@ include("conexion.php");
                                     $puntos_finales = $puntos_generados + $puntos_cliente - $puntos;
                                     $update = mysqli_query($conn, "UPDATE clientes SET puntos = '$puntos_finales' WHERE id = '$id_cliente'");
                                     if ($update) {
-                                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagar ' . $valor . '</div>';
+                                        echo '<div class="alert alert-success alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagar ' . $valor . '</div>';
                                         //terminar la ejecucion del script
 
                                     } else {
-                                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
+                                        echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
                                     }
                                 } else {
-                                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
+                                    echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
                                 }
                             } elseif ($puntos == 35 && $puntos_cliente >= 35) {
                                 $bono = 30000;
                                 $valor = $valor - $bono;
-                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1')");
+                                $insert = mysqli_query($conn, "INSERT INTO compras (user_id, valor, descripcion, fecha, punto_venta_id, vendedor_id) VALUES ('$id_cliente', '$valor', '$descripcion', '$fecha', '1', '$vendedor_id')");
 
                                 $puntos_generados = $valor / $puntos_cambiar[0];
 
@@ -167,17 +246,17 @@ include("conexion.php");
                                     $puntos_finales = $puntos_generados + $puntos_cliente - $puntos;
                                     $update = mysqli_query($conn, "UPDATE clientes SET puntos = '$puntos_finales' WHERE id = '$id_cliente'");
                                     if ($update) {
-                                        echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagar ' . $valor . '</div>';
+                                        echo '<div class="alert alert-success alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Compra registrada con éxito: total a pagar ' . $valor . '</div>';
                                         //terminar la ejecucion del script
 
                                     } else {
-                                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
+                                        echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al actualizar los puntos del cliente</div>';
                                     }
                                 } else {
-                                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
+                                    echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error al registrar la compra</div>';
                                 }
                             } else {
-                                echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No estás canjeando correctamente los puntos</div>';
+                                echo '<div class="alert alert-danger alert-dismissable custom-alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No estás canjeando correctamente los puntos</div>';
                             }
                         }
                     }
@@ -202,7 +281,12 @@ include("conexion.php");
                     <div class="col-sm-4">
                         <input type="text" name="cedula" class="form-control" placeholder="cedula" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                     </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-primary" onclick="validarCedula()">Validar Cedula</button>
+                    </div>
                 </div>
+
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Valor</label>
                     <div class="col-sm-4">
@@ -301,7 +385,7 @@ include("conexion.php");
                 var modal = $(this);
                 var cedula = $('input[name="cedula"]').val();
                 var valor = $('input[name="valor"]').val();
-                var puntos = $('input[name="puntos"]').val() || 0;
+                var puntos = $('select[name="puntos"]').val() || 0;
                 var descripcion = $('textarea[name="descripcion"]').val();
 
                 // Actualizar el contenido del div con los detalles de la compra

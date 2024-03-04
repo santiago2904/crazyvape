@@ -18,7 +18,8 @@ include("conexion.php");
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Datos de empleados</title>
@@ -58,29 +59,45 @@ include("conexion.php");
             }
             if (isset($_POST['save'])) {
 
+
+                $usuario = mysqli_real_escape_string($conn, (strip_tags($_POST["usuario"], ENT_QUOTES)));
                 $cedula = mysqli_real_escape_string($conn, (strip_tags($_POST["cedula"], ENT_QUOTES)));
                 $nombres = mysqli_real_escape_string($conn, (strip_tags($_POST["nombres"], ENT_QUOTES)));
                 $celular = mysqli_real_escape_string($conn, (strip_tags($_POST["celular"], ENT_QUOTES)));
                 $correo  = mysqli_real_escape_string($conn, (strip_tags($_POST["correo"], ENT_QUOTES)));
                 $rol_id = mysqli_real_escape_string($conn, (strip_tags($_POST["rol_id"], ENT_QUOTES)));
 
+                $Contrasena = mysqli_real_escape_string($conn, (strip_tags($_POST["Contrasena"], ENT_QUOTES)));
 
-                $update = mysqli_query($conn, "UPDATE empleados SET 
-                cedula = '$cedula', nombres='$nombres', celular='$celular', correo='$correo', rol_id='$rol_id' WHERE id='$id'")
-                    or die(mysqli_error());
-                if ($update) {
-                    echo '<script type="text/javascript">';
-                    echo 'window.location.href = "edit2.php?id=' . $id . '&cambio=true";';
-                    echo '</script>';
-                    exit;
+                $confirmContrasena = mysqli_real_escape_string($conn, (strip_tags($_POST["confirmContrasena"], ENT_QUOTES)));
+
+                $verificar = mysqli_query($conn, "SELECT * FROM empleados WHERE  cedula = '$cedula' AND usuario = '$usuario'");
+
+                if ((mysqli_num_rows($verificar) > 0) && ($cedula != $row['cedula'] || $usuario != $row['usuario'])) {
+                    // Ya existe un empleado con la misma cédula y usuario
+                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, ya existe alguien con la misma cedula o usuario</div>';
                 } else {
-                    echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo guardar los datos.</div>';
+                    if ($Contrasena != $confirmContrasena) {
+                        echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, las contraseñas no coinciden.</div>';
+                    } else {
+                        try {
+                            $update = mysqli_query($conn, "UPDATE empleados SET 
+                        cedula = '$cedula', nombres='$nombres', celular='$celular', correo='$correo', rol_id='$rol_id', contrasena= '$confirmContrasena' WHERE id='$id'");
+                            if ($update) {
+                                echo '<script type="text/javascript">';
+                                echo 'window.location.href = "edit2.php?id=' . $id . '&cambio=true";';
+                                echo '</script>';
+                                exit;
+                            } else {
+                                echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo guardar los datos.</div>';
+                            }
+                        } catch (\Throwable $th) {
+                            echo '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Error, no se pudo guardar los datos.</div>';
+                        }
+                    }
                 }
             }
 
-            if (isset($_GET['cambio']) == 'true') {
-                echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Los datos han sido guardados con éxito.</div>';
-            }
             ?>
 
             <form class="form-horizontal" id="editarForm" action="" method="post" onsubmit="return validarCorreo();">
@@ -100,6 +117,24 @@ include("conexion.php");
                     <label class="col-sm-3 control-label">Celular</label>
                     <div class="col-sm-4 input-group">
                         <input type="number" name="celular" value="<?php echo $row['celular']; ?>" class="form-control" placeholder="Número" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Contraseña</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="password" name="Contrasena" value="<?php echo $row['contrasena']; ?>" class="form-control" placeholder="contraseña" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">confirmar Contraseña</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="password" name="confirmContrasena" value="<?php echo $row['contrasena']; ?>" class="form-control" placeholder="contraseña" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">usuario</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="text" name="usuario" value="<?php echo $row['usuario']; ?>" class="form-control" placeholder="contraseña" required>
                     </div>
                 </div>
                 <div class="form-group">

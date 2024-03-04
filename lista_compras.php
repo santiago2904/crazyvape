@@ -19,7 +19,8 @@ include("conexion.php");
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Compras</title>
@@ -97,6 +98,10 @@ include("conexion.php");
                         <th>Descripción</th>
                         <th>Fecha</th>
                         <th>Valor</th>
+
+                        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
+                            <th>Vendedor</th>
+                        <?php endif; ?>
                         <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") : ?>
                             <th class="acciones-cell">Acciones</th>
                         <?php endif; ?>
@@ -113,9 +118,11 @@ include("conexion.php");
         IFNULL(c.descripcion, 'sin descripción') AS descripcion,
         c.fecha as fecha,
         cl.cedula as cedula,
-        cl.nombre as nombre
+        cl.nombre as nombre,
+        e.ususario as vendedor
     FROM compras c
     INNER JOIN clientes cl on c.user_id = cl.id
+    Inner JOIN empleados e on c.vendedor_id = e.id
     WHERE cl.cedula LIKE '$filter_value%'
     GROUP BY compraId, fecha
     ORDER BY fecha DESC LIMIT  10;");
@@ -130,9 +137,11 @@ include("conexion.php");
         IFNULL(c.descripcion, 'sin descripción') AS descripcion,
         c.fecha as fecha,
         cl.cedula as cedula,
-        cl.nombre as nombre
+        cl.nombre as nombre,
+        e.usuario as vendedor
     FROM compras c
     INNER JOIN clientes cl on c.user_id = cl.id
+    INNER JOIN empleados e on c.vendedor_id = e.id
     GROUP BY compraId, fecha
     ORDER BY fecha DESC LIMIT  10;");
                     }
@@ -141,24 +150,31 @@ include("conexion.php");
                     } else {
                         $no = 1;
                         while ($row = mysqli_fetch_assoc($sql)) {
-                            echo '
-        <tr>
-                    <td>' . $no . '</td>
-                    <td>' . $row['cedula'] . '</td>
-                    <td><a href="perfil_cliente.php?id=' . $row['clienteId'] . '"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . utf8_decode($row['nombre']) . '</a></td>
-                    <td>' . $row['descripcion'] . '</td>
-                    <td>' . $row['fecha'] . '</td>
-                    <td>' . $row['valor'] . '</td>
-                    <td>';
-                            if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") {
-                                echo '<div class="acciones-buttons">
-                            <a href="lista_compras.php?aksi=delete&id=' . $row['compraId'] . '" title="Eliminar" onclick="return confirm(\'Esta seguro de borrar esta compra de ' . $row['nombre'] . '?\')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                            </div>';
-                            }
-                            echo '
-        </td>
-        </tr>';
+                            echo '<tr>
+                                    <td>' . $no . '</td>
+                                    <td>' . $row['cedula'] . '</td>
+                                    <td><a href="perfil_cliente.php?id=' . $row['clienteId'] . '"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . utf8_decode($row['nombre']) . '</a></td>
+                                    <td>' . $row['descripcion'] . '</td>
+                                    <td>' . $row['fecha'] . '</td>
+                                    <td>' . $row['valor'] . '</td>';
 
+                            // Verifica si el usuario es admin antes de imprimir la columna "Vendedor"
+                            if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") {
+                                echo '<td>' . $row['vendedor'] . '</td>';
+                            }
+
+                            // Imprime la columna de acciones solo para el rol de ADMIN
+                            if (isset($_SESSION['rol']) && $_SESSION['rol'] == "ADMIN") {
+                                echo '<td>
+                                        <div class="acciones-buttons">
+                                            <a href="lista_compras.php?aksi=delete&id=' . $row['compraId'] . '" title="Eliminar" onclick="return confirm(\'¿Está seguro de borrar esta compra de ' . $row['nombre'] . '?\')" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                            </a>
+                                        </div>
+                                      </td>';
+                            }
+
+                            echo '</tr>';
                             $no++;
                         }
                     }
@@ -169,7 +185,7 @@ include("conexion.php");
         </div>
     </div>
     <center>
-        <p>&copy; Desarrollado por santiago palacio <?php echo date("Y"); ?></p </center>
+        <p>&copy; Desarrollado por santiago palacio para paris fragances <?php echo date("Y"); ?></p </center>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 </body>

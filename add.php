@@ -25,7 +25,8 @@ Website		 : http://www.obedalvarado.pw
 Blog         : http://obedalvarado.pw/blog/
 Email	 	 : info@obedalvarado.pw
 -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Agregar cliente</title>

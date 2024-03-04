@@ -191,7 +191,7 @@ include("conexion.php");
         </div>
     </div>
     <center>
-        <p>&copy; Desarrollado por santiago palacio <?php echo date("Y"); ?></p </center>
+        <p>&copy; Desarrollado por santiago palacio para paris fragances <?php echo date("Y"); ?></p </center>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 </body>
