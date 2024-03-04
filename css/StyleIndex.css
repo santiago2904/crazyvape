@@ -1,5 +1,5 @@
 body {
-    background-color: #7BBFE3; /* Cambia este color por el que desees */
+    background-color: #4fe67a; /* Cambia este color por el que desees */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +52,7 @@ input{
 
 button{
     float: center;
-    background-color: #4C7099;
+    background-color: #349b51;
     padding: .5rem;
     color: white;
     border: none;

@@ -2,7 +2,7 @@
 .profile-dropdown {
   min-width: 200px; /* Ancho mínimo del menú desplegable */
   padding: 15px; /* Espaciado interno */
-  background-color: #3A6F99; /* Color de fondo */
+  background-color: #0d873c; /* Color de fondo */
   color: #FFFFFF; /* Color del texto */
   border-radius: 5px; /* Borde redondeado */
   box-shadow: 0px 0px 10px rgba(207, 109, 109, 0.3); /* Sombra */
@@ -36,8 +36,8 @@
 
 /* Resto de tus estilos navbar-default */
 .navbar-default {
-background-color: #5C97D2; /* Cambio de color de fondo */
-border-color: #3A6F99;
+background-color: #0d873cad; /* Cambio de color de fondo */
+border-color: #226334;
 font-size: 25px; /* Cambio de color del borde */
 }
 .navbar-default .navbar-brand {
@@ -68,10 +68,10 @@ color: #ffffff; /* Cambio de color del texto de navegación al pasar el mouse o 
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
 color: #FFFFFF; /* Cambio de color del texto de navegación activo o desplegable */
-background-color: #3A6F99; /* Cambio de color de fondo del elemento activo o desplegable */
+background-color: #226334; /* Cambio de color de fondo del elemento activo o desplegable */
 }
 .navbar-default .navbar-toggle {
-border-color: #3A6F99; /* Cambio de color del borde del botón de alternancia de navegación */
+border-color: #226334; /* Cambio de color del borde del botón de alternancia de navegación */
 }
 .navbar-default .navbar-toggle .icon-bar {
 background-color: #FFFFFF; /* Cambio de color de las barras del icono de alternancia de navegación */
@@ -93,6 +93,6 @@ border-color: #FFFFFF; /* Cambio de color del borde de la barra de navegación c
 .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-  background-color: #3A6F99; /* Cambio de color de fondo del elemento activo del menú desplegable en pantallas pequeñas */
+  background-color: #226334; /* Cambio de color de fondo del elemento activo del menú desplegable en pantallas pequeñas */
 }
 }

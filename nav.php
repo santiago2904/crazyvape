@@ -44,7 +44,7 @@
         </ul>
         <!-- Mini perfil desplegable -->
         <ul class="nav navbar-nav navbar-right">
-            <li style="color: white; font-size: 20px; margin-top: 7%; ;"> Paris </li>
+            <li style="color: white; font-size: 20px; margin-top: 4.5%;"> CRAZY VAPE </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php

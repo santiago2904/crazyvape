@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
         }
 
         .gradient-custom {
-            background: linear-gradient(45deg, #7BBFE3, #5A92B8);
+            background-color: #0d873cad;
             height: 100%;
         }
 
@@ -51,11 +51,11 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
 
-                <div class="card bg-dark text-white">
+                <div class="card text-white" style="background-color: black;">
                     <div class="card-body p-5">
 
                         <div class="rounded-image-container">
-                            <img src="./iconos/logo.png" alt="Imagen de fondo" />
+                            <img src="./iconos/logo.jpg" alt="Imagen de fondo" />
                         </div>
                         <h2 class="fw-bold mb-2 text-uppercase text-center">Iniciar Sesion</h2>
 

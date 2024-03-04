@@ -19,7 +19,8 @@ include("conexion.php");
 
 <head>
 
-    <meta charset="utf-8">
+     <meta charset="UTF-8">
+    <link rel="icon" href="./iconos/icono.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Datos de clientes</title>
