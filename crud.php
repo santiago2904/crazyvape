@@ -150,10 +150,10 @@ include("conexion.php");
     COUNT(c.id) AS cantidadCompras,
     (cl.puntos) AS puntos,
     IFNULL(SUM(c.valor), 0) AS total
-    FROM clientes cl
+    FROM (SELECT * FROM clientes ORDER BY nombre ASC LIMIT 10) cl
     left JOIN compras c on c.user_id = cl.id
-    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo 
-    ORDER BY nombre ASC LIMIT  10");
+    GROUP BY cl.id, cl.nombre, cl.cedula, cl.numero, cl.correo
+    ORDER BY nombre ASC");
                     }
                     if (mysqli_num_rows($sql) == 0) {
                         echo '<tr><td colspan="8">No hay datos.</td></tr>';
